@@ -60,6 +60,18 @@ class ControllerMe {
       return "error";
   }
 
+  function breadcrumbsNama($s)
+  {
+    if($s == "info") // id info
+      return "Tentang Kopi";
+    elseif($s == "infomember") // id info member
+      return "Member";
+    elseif($s == "fasilitas") // id fasilitas
+      return "Fasilitas";
+    elseif($s == "konten") // id Lainnya
+      return "Lainnya";
+  }
+
   function fillMenuHeader() {
     $q = "SELECT * FROM t_menuhead_bnc";
     $dataMain = $this->db->selectData($q);
@@ -254,6 +266,93 @@ class ControllerMe {
     return "1";
   }
   // end login
+
+
+  // begin produk
+  function getProduk($id)
+  {
+    $q = "SELECT * FROM t_produk_bnc WHERE tipeProduk = '".$this->db->amanin($id)."' and status = '1' order by id DESC LIMIT 8";
+    $data = $this->db->selectData($q);
+    $str = "";
+    if($this->db->jumlahBaris($q) <= 0):
+      echo "<p><br/><h3>Data belum ada.</h3></p>";
+    else:
+      for ($i = 0; $i < count($data); $i += 1):
+?>
+        <div class="col-md-3 col-sm-6">
+            <div class="thumbnails thumbnail-style thumbnail-kenburn">
+              <div class="thumbnail-img">
+                    <div class="overflow-hidden">
+                        <img class="img-responsive" src="img/<?php echo $data[$i]["imgProduk"]; ?>" alt="<?php echo $data[$i]["namaProduk"]; ?>">
+                    </div>
+                    <a class="btn-more hover-effect" href="produk_<?php echo $_GET['id']; ?>_<?php echo $data[$i]["id"]; ?>.html">selengkapnya +</a>         
+                </div>
+                <div class="caption">
+                    <h3><a class="hover-effect" href="#"><?php echo $data[$i]["namaProduk"]; ?></a></h3>
+                    <?php echo $data[$i]["descProduk"]; ?>
+                </div>
+            </div>
+        </div>
+<?php
+      endfor;
+    endif;
+?>
+        <div class="margin-bottom-30"></div>
+        <div class="text-left">
+            <ul class="pagination">
+                <li><a href="#">«</a></li>
+                <li class="active"><a href="#">1</a></li>
+                <li><a href="#">2</a></li>
+                <li><a href="#">3</a></li>
+                <li><a href="#">...</a></li>
+                <li><a href="#">157</a></li>
+                <li><a href="#">158</a></li>
+                <li><a href="#">»</a></li>
+            </ul>                                                            
+        </div>
+<?php
+
+  }
+
+  function detailProduk($id)
+  {
+    $q = "SELECT * FROM t_produk_bnc WHERE id = '".$this->db->amanin($id)."'";
+    $data = $this->db->selectData($q);
+    $h = "";
+    for($i=0; $i<count($data); $i++):
+      $h .= '<div class="blog margin-bottom-40">';
+      $h .= '<h2><a href="blog_item_option1.html">'.$data[$i]["namaProduk"].'</a></h2>';
+      $h .= '<div class="blog-post-tags"><ul class="list-unstyled list-inline blog-info"><li><i class="fa fa-calendar"></i> '.$data[$i]["tglBuat"].'</li></ul><hr /></div>';
+      $h .= '<div class="blog-img"><img class="img-responsive" src="img/'.$data[$i]["imgProduk"].'" alt=""></div>'.$data[$i]["descProduk"].'</div>';
+    endfor;
+    return $h;
+  }
+
+  function idtipeProduk($idsub)
+  {
+    $q = "SELECT * FROM t_produk_bnc WHERE id = '".$this->db->amanin($idsub)."'";
+    $data = $this->db->selectDataSingle($q);
+    return $data['tipeProduk'];
+
+  }
+
+  // end produk
+
+  // begin subMenu deskripsi
+  function detailSubMenu($idsub)
+  {
+    $q = "SELECT * FROM t_submenuhead_bnc where subID = '".$this->db->amanin($idsub)."'";
+    $data = $this->db->selectData($q);
+    $h = "";
+    for($i=0; $i<count($data); $i++):
+      $h .= '<div class="blog margin-bottom-40">';
+      $h .= '<h2><a href="blog_item_option1.html">'.$data[$i]["subNama"].'</a></h2>';
+      $h .= '<div class="blog-post-tags"><ul class="list-unstyled list-inline blog-info"><li><i class="fa fa-calendar"></i> '.$data[$i]["tglBuat"].'</li></ul><hr /></div>';
+      $h .= '<div class="blog-img"></div>'.$data[$i]["subKonten"].'</div>';
+    endfor;
+    return $h;
+  }
+  // end subMenu deskripsi
 
 }
 
