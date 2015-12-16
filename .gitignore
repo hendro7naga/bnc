@@ -16,9 +16,10 @@ pom.xml.asc
 assets/
 .backup/
 
-#abaikan semua gambar dengan extensi .png
+#abaikan semua gambar dengan extensi .png .jpg
 *.png
 !logos/*.png
+img/*.jpg
 
 #abaikan python files
 *.py
