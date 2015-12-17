@@ -8,6 +8,9 @@ class ControllerMe {
   }
   function __destruct() {
     #code...
+    if (is_resource($this->db)) :
+      unset($this->db);
+    endif;
   }
 
   static function getInstanceMe() {
@@ -34,6 +37,21 @@ class ControllerMe {
       else
         return 1;
     }
+  }
+
+  function textCutter($str) {
+    $tmp = "";
+    $arr = explode(" ", $str);
+    $countSpace = 0;
+    for ($i = 0; $i < count($arr); $i += 1) {
+      $tmp .= $arr[$i] . " ";
+      $countSpace += 1;
+      if ($countSpace > 4) {
+        $tmp .= "<br/>";
+        $countSpace = 0;
+      }
+    }
+    return $tmp;
   }
 
   function cekSubParentId($q)
@@ -97,6 +115,60 @@ class ControllerMe {
     }
     $str .= "<li class=dropdown><a class=dropdown-toggle data-toggle=dropdown href=javascript:void(0);>Kontak Kami</a>" .
             "<ul class=dropdown-menu><li><a href=kontak_kami.html>Kontak Kami</a></li><li><a href=testimoni.html>Testimoni</a></li></ul>";
+    return $str;
+  }
+
+  function contentSlider() {
+    $q = "SELECT * FROM t_berita_bnc WHERE tampildepan=1 LIMIT 3";
+    $data = $this->db->selectData($q);
+    $str = "";
+
+    for ($i = 0; $i < count($data); $i += 1) :
+      $str .= "<li class=\"revolution-mch-1\" data-transition=\"fade\" data-slotamount=\"5\" data-masterspeed=\"1000\" data-title=\"Slide 2\">
+          <img src=\"img/{$data[$i]['gambarUtama']}\"  alt=\"darkblurbg\"  data-bgfit=cover data-bgposition=\"left top\" data-bgrepeat=\"no-repeat\">
+          <div class=\"tp-caption revolution-ch1 sft start\"
+              data-x=\"center\"
+              data-hoffset=\"0\"
+              data-y=\"100\"
+              data-speed=\"1500\"
+              data-start=\"500\"
+              data-easing=\"Back.easeInOut\"
+              data-endeasing=\"Power1.easeIn\"
+              data-endspeed=\"300\">
+              {$data[$i]['judul']}
+          </div>
+
+          <!-- LAYER -->
+          <div class=\"tp-caption revolution-ch2 sft\"
+              data-x=\"center\"
+              data-hoffset=\"0\"
+              data-y=\"190\"
+              data-speed=\"1400\"
+              data-start=\"2000\"
+              data-easing=\"Power4.easeOut\"
+              data-endspeed=\"300\"
+              data-endeasing=\"Power1.easeIn\"
+              data-captionhidden=\"off\"
+              style=\"z-index: 6\">
+              ". $this->textCutter($this->cleanTagAndSlicing($data[$i]['isi'], 15)) ."
+          </div>
+
+          <div class=\"tp-caption sft\"
+              data-x=\"center\"
+              data-hoffset=\"0\"
+              data-y=\"310\"
+              data-speed=\"1600\"
+              data-start=\"2800\"
+              data-easing=\"Power4.easeOut\"
+              data-endspeed=\"300\"
+              data-endeasing=\"Power1.easeIn\"
+              data-captionhidden=\"off\"
+              style=\"z-index: 6\"><br/>
+              <a href=\"berita_{$data[$i]['bid']}.html\" class=\"btn-u\" target=_blank>Selengkapnya</a>
+          </div>
+      </li>" . PHP_EOL;
+    endfor;
+
     return $str;
   }
 
@@ -212,7 +284,7 @@ class ControllerMe {
     return $data['infoKonten'];
   }
 
-  function getSosMed() 
+  function getSosMed()
   {
     $q = "SELECT * FROM t_sosmed_bnc";
     $dataSosmed = $this->db->selectData($q);
@@ -232,7 +304,7 @@ class ControllerMe {
     $key = "HENDROwaspadaBNConLY";
     $temp = $key.md5($q).sha1($key);
     return md5($temp);
-  } 
+  }
 
   function cekLogin($u, $p)
   {
@@ -285,7 +357,7 @@ class ControllerMe {
                     <div class="overflow-hidden">
                         <img class="img-responsive" src="img/<?php echo $data[$i]["imgProduk"]; ?>" alt="<?php echo $data[$i]["namaProduk"]; ?>">
                     </div>
-                    <a class="btn-more hover-effect" href="produk_<?php echo $_GET['id']; ?>_<?php echo $data[$i]["id"]; ?>.html">selengkapnya +</a>         
+                    <a class="btn-more hover-effect" href="produk_<?php echo $_GET['id']; ?>_<?php echo $data[$i]["id"]; ?>.html">selengkapnya +</a>
                 </div>
                 <div class="caption">
                     <h3><a class="hover-effect" href="#"><?php echo $data[$i]["namaProduk"]; ?></a></h3>
@@ -308,7 +380,7 @@ class ControllerMe {
                 <li><a href="#">157</a></li>
                 <li><a href="#">158</a></li>
                 <li><a href="#">»</a></li>
-            </ul>                                                            
+            </ul>
         </div>
 <?php
 
