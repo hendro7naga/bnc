@@ -54,6 +54,20 @@ class ControllerMe {
     return $tmp;
   }
 
+  function rupiah($num){
+  if($num <= 0){
+    return "Rp. 0";
+  }else{
+    $rp=number_format($num,0,",",".");
+    return "Rp. ".$rp;
+    }
+  }
+
+  function ubahTimeStamp($s)
+  {
+    return date("d/m/Y H:i:s", strtotime($s))." WIB";
+  }
+
   function cekSubParentId($q)
   {
     $queris = "SELECT subID, subParentID FROM t_submenuhead_bnc WHERE subID = '".$this->db->amanin($q)."' LIMIT 1";
@@ -284,7 +298,7 @@ class ControllerMe {
     return $data['infoKonten'];
   }
 
-  function getSosMed()
+  function getSosMed() 
   {
     $q = "SELECT * FROM t_sosmed_bnc";
     $dataSosmed = $this->db->selectData($q);
@@ -304,7 +318,7 @@ class ControllerMe {
     $key = "HENDROwaspadaBNConLY";
     $temp = $key.md5($q).sha1($key);
     return md5($temp);
-  }
+  } 
 
   function cekLogin($u, $p)
   {
@@ -357,10 +371,11 @@ class ControllerMe {
                     <div class="overflow-hidden">
                         <img class="img-responsive" src="img/<?php echo $data[$i]["imgProduk"]; ?>" alt="<?php echo $data[$i]["namaProduk"]; ?>">
                     </div>
-                    <a class="btn-more hover-effect" href="produk_<?php echo $_GET['id']; ?>_<?php echo $data[$i]["id"]; ?>.html">selengkapnya +</a>
+                    <a class="btn-more hover-effect" href="produk_<?php echo $_GET['id']; ?>_<?php echo $data[$i]["id"]; ?>.html">selengkapnya +</a>         
                 </div>
                 <div class="caption">
                     <h3><a class="hover-effect" href="#"><?php echo $data[$i]["namaProduk"]; ?></a></h3>
+                    <p><small class="label label-danger"><?php echo $this->rupiah($data[$i]["hargaProduk"]); ?></small></p>
                     <?php echo $data[$i]["descProduk"]; ?>
                 </div>
             </div>
@@ -380,7 +395,7 @@ class ControllerMe {
                 <li><a href="#">157</a></li>
                 <li><a href="#">158</a></li>
                 <li><a href="#">»</a></li>
-            </ul>
+            </ul>                                                            
         </div>
 <?php
 
@@ -394,7 +409,8 @@ class ControllerMe {
     for($i=0; $i<count($data); $i++):
       $h .= '<div class="blog margin-bottom-40">';
       $h .= '<h2><a href="blog_item_option1.html">'.$data[$i]["namaProduk"].'</a></h2>';
-      $h .= '<div class="blog-post-tags"><ul class="list-unstyled list-inline blog-info"><li><i class="fa fa-calendar"></i> '.$data[$i]["tglBuat"].'</li></ul><hr /></div>';
+      $h .= '<p><small class="label label-danger">'.$this->rupiah($data[$i]["hargaProduk"]).'</small></p>';
+      $h .= '<div class="blog-post-tags"><ul class="list-unstyled list-inline blog-info"><li><i class="fa fa-calendar"></i> '.$this->ubahTimeStamp($data[$i]["tglBuat"]).'</li></ul><hr /></div>';
       $h .= '<div class="blog-img"><img class="img-responsive" src="img/'.$data[$i]["imgProduk"].'" alt=""></div>'.$data[$i]["descProduk"].'</div>';
     endfor;
     return $h;
