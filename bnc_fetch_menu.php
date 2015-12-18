@@ -2,9 +2,9 @@
 require_once("convikx/apps.php");
 ?>
 <!DOCTYPE html>
-<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->  
-<!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->  
-<!--[if !IE]><!--> <html lang="en"> <!--<![endif]-->  
+<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->
+<!--[if !IE]><!--> <html lang="en"> <!--<![endif]-->
 <head>
     <title>
     <?php
@@ -33,9 +33,9 @@ require_once("convikx/apps.php");
     </title>
     <base href="<?php echo $kontrol->geturlBnc(); ?>" />
     <?php include("include/headpage.php"); ?>
-</head>	
+</head>
 
-<body class="header-fixed header-fixed-space">    
+<body class="header-fixed header-fixed-space">
 
 <div class="wrapper">
     <!--=== Header v6 ===-->
@@ -64,8 +64,8 @@ require_once("convikx/apps.php");
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 	<?php include("include/menu.php"); ?>
                 <!--/navbar-collapse-->
-            </div>    
-        </div>            
+            </div>
+        </div>
         <!-- End Navbar -->
     </div>
     <!--=== End Header v6 ===-->
@@ -78,7 +78,7 @@ require_once("convikx/apps.php");
     	}
     	elseif(isset($_GET['x']) && $_GET['x'] == "detailp.html")
     	{
-    		include("include/detailsubp.php");
+    		include("include/detailsub.php");
     	}
     	elseif(isset($_GET['x']) && $_GET['x'] == "detail.html")
     	{
@@ -95,12 +95,12 @@ require_once("convikx/apps.php");
     ?>
 
     <!--=== Footer Version 1 ===-->
-     <?php include("include/footer.php"); ?> 
+     <?php include("include/footer.php"); ?>
     <!--=== End Footer Version 1 ===-->
 </div><!--/wrapper-->
 
-<!-- JS Global Compulsory -->			
+<!-- JS Global Compulsory -->
 <?php include("include/jsbawah.php"); ?>
 
 </body>
-</html>	
+</html>
