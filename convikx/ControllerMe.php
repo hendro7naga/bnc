@@ -40,6 +40,12 @@ class ControllerMe {
     }
   }
 
+  function geturlBnc()
+  {
+    return $this->db->urlBnc();
+  }
+
+
   function textCutter($str) {
     $tmp = "";
     $arr = explode(" ", $str);
