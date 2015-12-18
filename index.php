@@ -6,7 +6,7 @@ require_once("convikx/apps.php");
 <!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->
 <!--[if !IE]><!--> <html lang="en"> <!--<![endif]-->
 <head>
-    <title>Bhineka Nusantara Coffee</title>
+    <title><?php echo $kontrol->getTilte("title"); ?></title>
 
    <?php include("include/head.php"); ?>
 </head>
