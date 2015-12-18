@@ -1,5 +1,6 @@
 <?php
 require_once("DebeSQL.php");
+
 class ControllerMe {
   private static $controllerme;
   private $db;
@@ -102,6 +103,10 @@ class ControllerMe {
       return "Fasilitas";
     elseif($s == "konten") // id Lainnya
       return "Lainnya";
+    elseif($s == "profil") // id Lainnya
+      return "Profil";
+    elseif($s == "berita") // id Lainnya
+      return "Berita";
   }
 
   function fillMenuHeader() {
@@ -178,7 +183,7 @@ class ControllerMe {
               data-endeasing=\"Power1.easeIn\"
               data-captionhidden=\"off\"
               style=\"z-index: 6\"><br/>
-              <a href=\"berita_{$data[$i]['bid']}.html\" class=\"btn-u\" target=_blank>Selengkapnya</a>
+              <a href=\"berita_{$data[$i]['bid']}/".$this->cleanUrl($data[$i]['judul']).".html\" class=\"btn-u\" target=_blank>Selengkapnya</a>
           </div>
       </li>" . PHP_EOL;
     endfor;
@@ -202,6 +207,21 @@ class ControllerMe {
     return implode(" ", $dataArr);;
   }
 
+  function cleanUrl($str)
+  {
+    $tolower = strtolower($str);
+    $h = str_replace(' ', '-', $tolower);
+    return $h;
+  }
+
+  function uncleanUrl($str)
+  {
+    $tolower = strtolower($str);
+    $h = str_replace('-', ' ', $tolower);
+    $up = ucwords($h);
+    return $up;
+  }
+
   function loadPreviewContent($ids) {
     $q = "SELECT * FROM t_info_bnc WHERE infoID='".$this->db->amanin($ids)."'";
     $data = $this->db->selectDataSingle($q);
@@ -212,8 +232,16 @@ class ControllerMe {
 
     $str = "<h3 class=\"title-v3-bg text-uppercase\">{$data['infoJudul']}</h3>
     <p>{$contents}.</p>
-    <a class=\"text-uppercase\" href=\"info_{$data['infoID']}.html\">Read More</a>";
+    <a class=\"text-uppercase\" href=\"profile/".$this->cleanUrl($data['infoJudul']).".html\">Selengkapnya</a>";
     return $str;
+  }
+
+  function getProfile($q)
+  {
+    $queries = "SELECT * FROM t_info_bnc WHERE infoJudul = '".$this->db->amanin($q)."'";
+    $data = $this->db->selectDataSingle($queries);
+    return $data["infoKonten"];
+
   }
 
   function getUcapan() {
@@ -237,12 +265,27 @@ class ControllerMe {
               <div class=caption>
                   <h3><a href=javascript:void(0)>{$data[$i]['judul']}</a></h3>
                   <p>". $this->cleanTagAndSlicing($data[$i]['isi'], 17) ." .....</p>
-                  <p><a class=\"read-more\" href=berita_{$data[$i]['bid']}.html>See More</a></p>
+                  <p><a class=\"read-more\" href=berita_{$data[$i]['bid']}/".$this->cleanUrl($data[$i]['judul']).".html>Selengkapnya</a></p>
               </div>
           </div>
       </div>" . PHP_EOL;
     }
     return $str;
+  }
+
+  function getBerita($q)
+  {
+    $queries = "SELECT * FROM t_berita_bnc WHERE bid = '".$this->db->amanin($q)."'";
+    $data = $this->db->selectData($queries);
+    $h = "";
+    for($i=0; $i<count($data); $i++):
+      $h .= '<div class="blog margin-bottom-40">';
+      $h .= '<h2><a href="#">'.$data[$i]["judul"].'</a></h2>';
+      $h .= '<div class="blog-post-tags"><ul class="list-unstyled list-inline blog-info"><li><i class="fa fa-calendar"></i> '.$this->ubahTimeStamp($data[$i]["tanggal"]).'</li></ul><hr /></div>';
+      $h .= '<div class="blog-img"><img class="img-responsive" src="img/'.$data[$i]["gambarUtama"].'" alt=""></div>'.$data[$i]["isi"].'</div>';
+    endfor;
+    return $h;
+
   }
 
   function getTestimonial() {
@@ -408,7 +451,7 @@ class ControllerMe {
     $h = "";
     for($i=0; $i<count($data); $i++):
       $h .= '<div class="blog margin-bottom-40">';
-      $h .= '<h2><a href="blog_item_option1.html">'.$data[$i]["namaProduk"].'</a></h2>';
+      $h .= '<h2><a href="#">'.$data[$i]["namaProduk"].'</a></h2>';
       $h .= '<p><small class="label label-danger">'.$this->rupiah($data[$i]["hargaProduk"]).'</small></p>';
       $h .= '<div class="blog-post-tags"><ul class="list-unstyled list-inline blog-info"><li><i class="fa fa-calendar"></i> '.$this->ubahTimeStamp($data[$i]["tglBuat"]).'</li></ul><hr /></div>';
       $h .= '<div class="blog-img"><img class="img-responsive" src="img/'.$data[$i]["imgProduk"].'" alt=""></div>'.$data[$i]["descProduk"].'</div>';
@@ -435,12 +478,48 @@ class ControllerMe {
     for($i=0; $i<count($data); $i++):
       $h .= '<div class="blog margin-bottom-40">';
       $h .= '<h2><a href="blog_item_option1.html">'.$data[$i]["subNama"].'</a></h2>';
-      $h .= '<div class="blog-post-tags"><ul class="list-unstyled list-inline blog-info"><li><i class="fa fa-calendar"></i> '.$data[$i]["tglBuat"].'</li></ul><hr /></div>';
+      $h .= '<div class="blog-post-tags"><ul class="list-unstyled list-inline blog-info"><li><i class="fa fa-calendar"></i> '.$this->ubahTimeStamp($data[$i]["tglBuat"]).'</li></ul><hr /></div>';
       $h .= '<div class="blog-img"></div>'.$data[$i]["subKonten"].'</div>';
     endfor;
     return $h;
   }
   // end subMenu deskripsi
+
+  function getTilte($page, $key=null, $optional = null)
+  {
+    if($page == "profil")
+    {
+      $q = "SELECT * FROM t_info_bnc WHERE infoJudul = '".$this->db->amanin($key)."'";
+      $data = $this->db->selectDataSingle($q);
+      return $this->uncleanUrl($data["infoJudul"])." ".$this->db->bnc();
+    }
+    elseif($page == "produk.html")
+    {
+      return ($key == "1") ? 'Produk Makanan '.$this->db->bnc():'Produk Minuman '.$this->db->bnc();
+    }
+    elseif($page == "produk")
+    {
+      $q = "SELECT * FROM t_produk_bnc WHERE id = '".$this->db->amanin($key)."'";
+      $data = $this->db->selectDataSingle($q);
+      return $this->db->bnc().": ".$data["namaProduk"];
+    }
+    elseif(($page == "info") OR ($page == "infomember") OR ($page == "fasilitas") OR ($page == "konten"))
+    {
+      $q = "SELECT * FROM t_submenuhead_bnc WHERE subID = '".$this->db->amanin($key)."'";
+      $data = $this->db->selectDataSingle($q);
+      return $this->db->bnc().": ".$data["subNama"];
+    }
+    elseif($page == "berita")
+    {
+      $q = "SELECT * FROM t_berita_bnc WHERE bid = '".$this->db->amanin($key)."'";
+      $data = $this->db->selectDataSingle($q);
+      return $this->db->bnc().": ".$data["judul"];
+    }
+    else
+    {
+      return $this->db->bnc();
+    }
+  }
 
 }
 
