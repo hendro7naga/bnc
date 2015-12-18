@@ -121,6 +121,11 @@ class DebeSQL {
     {
       return "BNC";
     }
+
+    public function urlBnc()
+    {
+      return "http://localhost/bnc/";
+    }
 }
 
 /*.... end of DebeSQL class ....*/
