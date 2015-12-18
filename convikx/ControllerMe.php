@@ -263,7 +263,7 @@ class ControllerMe {
     $data = $this->db->selectData($q);
     $str = "";
     for ($i = 0; $i < count($data); $i += 1) {
-      $str .= "<div class=\"col-sm-4 col-sm-offset-3\">
+      $str .= "<div class=\"col-sm-4 col-sm-offset-0\">
           <div class=\"thumbnails-v1\">
               <div class=\"thumbnail-img\">
                   <img class=\"img-responsive\" src=\"img/{$data[$i]['gambarUtama']}\" alt=bnCoffeeImages>
@@ -347,7 +347,7 @@ class ControllerMe {
     return $data['infoKonten'];
   }
 
-  function getSosMed() 
+  function getSosMed()
   {
     $q = "SELECT * FROM t_sosmed_bnc";
     $dataSosmed = $this->db->selectData($q);
@@ -367,7 +367,7 @@ class ControllerMe {
     $key = "HENDROwaspadaBNConLY";
     $temp = $key.md5($q).sha1($key);
     return md5($temp);
-  } 
+  }
 
   function cekLogin($u, $p)
   {
@@ -420,7 +420,7 @@ class ControllerMe {
                     <div class="overflow-hidden">
                         <img class="img-responsive" src="img/<?php echo $data[$i]["imgProduk"]; ?>" alt="<?php echo $data[$i]["namaProduk"]; ?>">
                     </div>
-                    <a class="btn-more hover-effect" href="produk_<?php echo $_GET['id']; ?>_<?php echo $data[$i]["id"]; ?>.html">selengkapnya +</a>         
+                    <a class="btn-more hover-effect" href="produk_<?php echo $_GET['id']; ?>_<?php echo $data[$i]["id"]; ?>.html">selengkapnya +</a>
                 </div>
                 <div class="caption">
                     <h3><a class="hover-effect" href="#"><?php echo $data[$i]["namaProduk"]; ?></a></h3>
@@ -444,7 +444,7 @@ class ControllerMe {
                 <li><a href="#">157</a></li>
                 <li><a href="#">158</a></li>
                 <li><a href="#">»</a></li>
-            </ul>                                                            
+            </ul>
         </div>
 <?php
 
