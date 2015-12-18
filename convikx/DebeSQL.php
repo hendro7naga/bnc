@@ -116,6 +116,11 @@ class DebeSQL {
       }
     }
     //end of query db ...
+
+    public function bnc()
+    {
+      return "BNC";
+    }
 }
 
 /*.... end of DebeSQL class ....*/
