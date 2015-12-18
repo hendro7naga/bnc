@@ -6,8 +6,32 @@ require_once("convikx/apps.php");
 <!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->  
 <!--[if !IE]><!--> <html lang="en"> <!--<![endif]-->  
 <head>
-    <title></title>
-
+    <title>
+    <?php
+        if(!isset($_GET['x']) && isset($_GET['q']))
+        {
+            if($_GET['q'] == "produk.html")
+                echo $kontrol->getTilte($_GET['q'], $_GET['id']);
+        }
+        elseif(isset($_GET['x']) && $_GET['x'] == "detailp.html")
+        {
+                echo $kontrol->getTilte($_GET['q'], $_GET['idp'], $_GET['x']);
+        }
+        elseif(isset($_GET['x']) && $_GET['x'] == "detail.html")
+        {
+            if(isset($_GET['q']))
+            {
+                if(($_GET['q'] == "info") OR ($_GET['q'] == "infomember") OR ($_GET['q'] == "fasilitas") OR ($_GET['q'] == "konten"))
+                    echo $kontrol->getTilte($_GET['q'], $_GET['id'], $_GET['x']);
+                elseif(($_GET['q'] == "profil") OR ($_GET['q'] == "berita"))
+                    echo $kontrol->getTilte($_GET['q'], $_GET['id'], $_GET['x']);
+            }
+        }
+        else
+            echo $kontrol->getTilte($_GET['q']);
+    ?>
+    </title>
+    <base href="<?php echo $kontrol->geturlBnc(); ?>" />
     <?php include("include/headpage.php"); ?>
 </head>	
 
@@ -62,6 +86,8 @@ require_once("convikx/apps.php");
     		{
     			if(($_GET['q'] == "info") OR ($_GET['q'] == "infomember") OR ($_GET['q'] == "fasilitas") OR ($_GET['q'] == "konten"))
     				include("include/detailsub.php");
+                elseif(($_GET['q'] == "profil") OR ($_GET['q'] == "berita"))
+                    include("include/detailberita.php");
     		}
     	}
     	else

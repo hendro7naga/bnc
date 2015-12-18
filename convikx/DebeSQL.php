@@ -116,6 +116,16 @@ class DebeSQL {
       }
     }
     //end of query db ...
+
+    public function bnc()
+    {
+      return "BNC";
+    }
+
+    public function urlBnc()
+    {
+      return "http://localhost/bnc/";
+    }
 }
 
 /*.... end of DebeSQL class ....*/
