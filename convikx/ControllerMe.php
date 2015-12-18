@@ -319,10 +319,12 @@ class ControllerMe {
 
   /*... for footer ...*/
   function getLocation() {
-    $q = "SELECT infoJalan, infoKota, infoProvinsi, infoNegara, infoTelepon, infoFax, infoMails FROM t_informasi_bnc";
-    $dataLokasi = $this->db->selectData($q);
-    $str = "<address class=md-margin-bottom-40>";
-    for ($i = 0; $i < count($dataLokasi); $i += 1) {
+    //$q = "SELECT infoJalan, infoKota, infoProvinsi, infoNegara, infoTelepon, infoFax, infoMails FROM t_informasi_bnc";
+    $q = "SELECT infoKonten FROM t_info_bnc WHERE infoID=110";
+    $dataLokasi = $this->db->selectDataSingle($q);
+    $str = "<address class=md-margin-bottom-40>" . PHP_EOL;
+    $str .= $dataLokasi['infoKonten'] . PHP_EOL;
+    /*for ($i = 0; $i < count($dataLokasi); $i += 1) {
       $str .= $dataLokasi[$i]['infoJalan'] . " ";
       $str .= $dataLokasi[$i]['infoKota'];
       $str .= ", ".$dataLokasi[$i]['infoProvinsi'] . "<br/>" . PHP_EOL;
@@ -330,8 +332,8 @@ class ControllerMe {
       $str .= "Phone: " . $dataLokasi[$i]['infoTelepon'] . "<br/>" . PHP_EOL;
       $str .= "Fax: " . $dataLokasi[$i]['infoFax'] . "<br/>" . PHP_EOL;
       $str .= "Email: <a href=mailto:{$dataLokasi[$i]['infoMails']} class=>" . $dataLokasi[$i]['infoMails'] . "</a>" . PHP_EOL;
-    }
-    $str .= "</address>";
+    }*/
+    $str .= "</address>" . PHP_EOL;
     return $str;
   }
 
