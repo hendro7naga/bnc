@@ -27,7 +27,7 @@
                         $(divMain).closeModal();
                         $(divMain).remove();
                     };
-                
+
                 divMain.setAttribute('id', 'modal1');
                 divMain.setAttribute('class', 'modal');
 
@@ -65,18 +65,18 @@
                     $('#modal1').remove();
                 });
             }
-            
+
             //return divMain;
         },
         validation: {
             inputText: function (data, minDataLength) {
-                var patterns = /^[A-Za-z]{0,}$/,
-                    tmpData  = data.replace(' ', 'a');
-                if (minDataLength !== undefined || minDataLength !== null || minDataLength > 0) {
-                    return (patterns.test(tmpData)) ? ((tmpData.length + 1 > minDataLength) ? true : false) : false;
+                var patterns = /^[A-Za-z]{0,}(.{0,})?[A-Za-z]$/g,
+                    tmpData  = data.replace(/ /g, 'a');
+                if (minDataLength !== undefined || minDataLength > 0) {
+                    return (patterns.test(data)) ? ((data.length >= minDataLength) ? true : false) : false;
                 } else {
-                    //return (patterns.test(tmpData)) ? true : false;
-                    return tmpData;
+                    return (patterns.test(data)) ? true : false;
+                    //return tmpData;
                 }
             }
         }

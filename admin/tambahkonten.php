@@ -25,7 +25,7 @@ require_once("../convikx/appsadmin.php");
   <!-- Start Page Loading -->
     <div id="loader-wrapper">
     Loading...
-        <div id="loader"></div>        
+        <div id="loader"></div>
         <div class="loader-section section-left"></div>
         <div class="loader-section section-right"></div>
     </div>
@@ -44,14 +44,14 @@ require_once("../convikx/appsadmin.php");
                         <li class="search-out">
                             <input type="text" class="search-out-text">
                         </li>
-                        <li>    
-                            <a href="javascript:void(0);" class="waves-effect waves-block waves-light show-search"><i class="mdi-action-search"></i></a>                              
+                        <li>
+                            <a href="javascript:void(0);" class="waves-effect waves-block waves-light show-search"><i class="mdi-action-search"></i></a>
                         </li>
                         <li><a href="javascript:void(0);" class="waves-effect waves-block waves-light toggle-fullscreen"><i class="mdi-action-settings-overscan"></i></a>
                         </li>
                         <li><a href="javascript:void(0);" class="waves-effect waves-block waves-light"><i class="mdi-social-notifications"></i></a>
                         </li>
-                        <!-- Dropdown Trigger -->                        
+                        <!-- Dropdown Trigger -->
                         <li><a href="#" data-activates="chat-out" class="waves-effect waves-block waves-light chat-collapse"><i class="mdi-communication-chat"></i></a>
                         </li>
                     </ul>
@@ -152,27 +152,29 @@ require_once("../convikx/appsadmin.php");
                 </div>
               </div>
               <script type="text/javascript">
-                  var fom     = document.getElementById('fomTambahKonten'),
-                      btn     = document.getElementById('btnSimpan'),
-                      judul   = document.getElementById('judulKonten'),
-                      konten  = CKEDITOR.instances.editor1.getData(),
-                      simpan  = function (evt) {
+                  var fom         = document.getElementById('fomTambahKonten'),
+                      btn         = document.getElementById('btnSimpan'),
+                      judul       = document.getElementById('judulKonten'),
+                      dataKonten  = CKEDITOR.instances.editor1,
+                      simpan      = function (evt) {
                           evt.stopPropagation();
                           if (!expression.validation.inputText(judul.value, 2)) {
                               expression.modals("Harap isikan judul dengan benar!");
                               judul.focus();
                               return;
                           }
-                          /*if (!expression.validation.inputText(
-                              expression.cleanTag(konten).trim()
+
+                          if (!expression.validation.inputText(
+                              expression.cleanTag(dataKonten.getData()).trim()
                           )) {
                               expression.modals("Konten yang akan disimpan tidak boleh kosong!!!");
                               return;
                           } else {
                               expression.modals("Konten sudah benar dan akan disimpan");
-                          }*/
-                          var t = expression.cleanTag(konten).trim();
-                          expression.modals("Data Anda : " + t.replace(' ', 'a'));
+                          }
+                          //var t = expression.cleanTag(dataKonten.getData()).trim();
+                          //expression.modals("Data Anda : " + t.replace(' ', 'a'));
+                          //expression.modals("Data Anda : " + dataKonten.getData());
                           //fom.submit();
                       };
                   btn.addEventListener('click', simpan);
@@ -202,16 +204,16 @@ require_once("../convikx/appsadmin.php");
     <!-- ================================================
     Scripts
     ================================================ -->
-    
+
     <!-- jQuery Library -->
-    <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>    
+    <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
     <!--materialize js-->
     <script type="text/javascript" src="js/materialize.js"></script>
     <!--prism-->
     <script type="text/javascript" src="js/prism.js"></script>
     <!--scrollbar-->
     <script type="text/javascript" src="js/plugins/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-    
+
     <!-- chartjs -->
     <script type="text/javascript" src="js/plugins/chartjs/chart.min.js"></script>
     <script type="text/javascript" src="js/plugins/chartjs/chart-script.js"></script>
@@ -221,14 +223,14 @@ require_once("../convikx/appsadmin.php");
     <script type="text/javascript" src="js/plugins/sparkline/sparkline-script.js"></script>
 
     <!-- chartist -->
-    <script type="text/javascript" src="js/plugins/chartist-js/chartist.min.js"></script>   
-    
+    <script type="text/javascript" src="js/plugins/chartist-js/chartist.min.js"></script>
+
     <!--plugins.js - Some Specific JS codes for Plugin Settings-->
     <script type="text/javascript" src="js/plugins.js"></script>
 	<script type="text/javascript" src="js/formaksi.js"></script>
-    
 
-    
+
+
 </body>
 
 </html>
