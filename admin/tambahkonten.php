@@ -11,12 +11,23 @@ if(isset($_GET['keluar']))
 	header("Location:../");
 }
 require_once("../convikx/appsadmin.php");
+if (isset($_GET['konten'])) {
+  $req = $_GET['konten'];
+  $aksi = null;
+  $heads = null;
+  $fomname = null;
+  if ($req == 'tambahkonten') :
+    $heads = "Tambah Konten";
+  elseif ($_GET['konten'] == 'editkonten') :
+    $heads = "Edit Konten";
+  endif;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <?php include("include/head.php"); ?>
-  <title>BNC - Tambah Konten</title>
+  <title>BNC - <?php echo $heads; ?></title>
   <script src="ckeditor/ckeditor.js"></script>
   <script src="js/expression.js"></script>
 </head>
@@ -112,7 +123,7 @@ require_once("../convikx/appsadmin.php");
                   <div class="row">
                     <?php //echo $kontrol->formUbahData($_SESSION['login']); ?>
                     <div class="col s12">
-                        <form action="p_tambahkonten" name="fomTambahKonten" id="fomTambahKonten" class="col s12">
+                        <form action="p_tambahkonten" name="fomTambahKonten" id="fomTambahKonten" class="col s12" method="POST">
                             <div class="row">
                                 <div class="input-field col s2">
                                   <i class="material-icons mdi-social-person prefix"></i>
@@ -138,6 +149,7 @@ require_once("../convikx/appsadmin.php");
                                 </div>
                                 <div class="divider"></div>
                                 <div class="section">
+                                    <input type="hidden" name="dataPost" value="tambahKonten">
                                     <div class="input-field col s12">
                                         <button class="btn waves-effect waves-light right" id="btnSimpan" type="button" name="action">Submit
                                             <i class="mdi-content-save right"></i>
@@ -169,13 +181,8 @@ require_once("../convikx/appsadmin.php");
                           )) {
                               expression.modals("Konten yang akan disimpan tidak boleh kosong!!!");
                               return;
-                          } else {
-                              expression.modals("Konten sudah benar dan akan disimpan");
                           }
-                          //var t = expression.cleanTag(dataKonten.getData()).trim();
-                          //expression.modals("Data Anda : " + t.replace(' ', 'a'));
-                          //expression.modals("Data Anda : " + dataKonten.getData());
-                          //fom.submit();
+                          fom.submit();
                       };
                   btn.addEventListener('click', simpan);
               </script>

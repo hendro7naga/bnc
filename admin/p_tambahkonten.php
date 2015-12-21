@@ -13,6 +13,17 @@ if(isset($_GET['keluar']))
 
 require_once("../convikx/appsadmin.php");
 
-echo "<h2>Helo</h2>";
+if (isset($_POST['dataPost'])) {
+  $dataPost = $_POST['dataPost'];
+  if ($dataPost === "tambahKonten"):
+    $authors = $_POST['author'];
+    $judul = $_POST['judulKonten'];
+    $konten = $_POST['editor1'];
+  else:
+    echo "Edit/hapus kontent";
+  endif;
+} else {
+  echo "Fom tidak diterima";
+}
 
 ?>

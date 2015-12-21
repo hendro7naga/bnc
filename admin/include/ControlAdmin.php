@@ -39,7 +39,7 @@ class ControlAdmin {
     $key = "HENDROwaspadaBNConLY";
     $temp = $key.md5($q).sha1($key);
     return md5($temp);
-  } 
+  }
 
   function cekLogin($u, $p)
   {
@@ -52,7 +52,7 @@ class ControlAdmin {
     }
     return "0";
 
-  } 
+  }
 
   function buatPass($q)
   {
@@ -130,7 +130,7 @@ class ControlAdmin {
     $str .= '<li class="bold"><a class="collapsible-header  waves-effect waves-cyan"><i class="mdi-editor-insert-comment"></i> SubMenu</a>';
     $str .= '<div class="collapsible-body"><ul><li><a href="#">Tambah</a></li><li><a href="#">Edit/Hapus</a></li></ul></div></li>';
     $str .= '<li class="bold"><a class="collapsible-header  waves-effect waves-cyan"><i class="mdi-editor-insert-comment"></i> Konten</a>';
-    $str .= '<div class="collapsible-body"><ul><li><a href="tambahkonten">Tambah</a></li><li><a href="#">Edit/Hapus</a></li></ul></div></li>';
+    $str .= '<div class="collapsible-body"><ul><li><a href="tambahkonten?konten=tambahkonten">Tambah</a></li><li><a href="#">Edit/Hapus</a></li></ul></div></li>';
     $str .= '<li class="bold"><a href="#" class="waves-effect waves-cyan"><i class="mdi-communication-email"></i> Kontak Kami <span class="new badge">4</span></a></li>';
     $str .= '<li class="bold"><a href="#" class="waves-effect waves-cyan"><i class="mdi-communication-email"></i> Testimoni <span class="new badge">4</span></a></li>';
     $str .= '<li class="bold"><a href="#" class="waves-effect waves-cyan"><i class="mdi-communication-email"></i> Ucapan </a></li>';
