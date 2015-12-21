@@ -12,9 +12,12 @@ pom.xml.asc
 .nrepl-port
 
 # anyway
-#ignore all files in assets directory
+#ignore all files in specified directory
 assets/
 .backup/
+ckeditor/
+folksytdev/
+
 
 #abaikan semua gambar dengan extensi .png .jpg
 *.png

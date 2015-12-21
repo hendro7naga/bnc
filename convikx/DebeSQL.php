@@ -106,8 +106,7 @@ class DebeSQL {
       }
     }
 
-    function insertData($q)
-    {
+    function insertData($q) {
       if ($this->initConnection()) {
         return $this->conn->query($q);
       }
