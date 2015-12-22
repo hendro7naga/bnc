@@ -114,6 +114,13 @@ class DebeSQL {
         return null;
       }
     }
+    function tryConn() {
+      if ($this->initConnection()) {
+        return 1;
+      } else {
+        return 0;
+      }
+    }
     //end of query db ...
 
     public function bnc()

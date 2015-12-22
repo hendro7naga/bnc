@@ -11,26 +11,12 @@ if(isset($_GET['keluar']))
 	header("Location:../");
 }
 require_once("../convikx/appsadmin.php");
-if (isset($_GET['actions'])) {
-  $reqs = $_GET['actions'];
-  $aksi = null;
-  $heads = null;
-  $fomname = null;
-  $judul = "";
-  $isidata = "";
-
-  if ($reqs == 'tambahkonten') :
-    $heads = "Tambah Konten";
-  elseif ($reqs == 'editkonten') :
-    $heads = "Edit Konten";
-  endif;
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <?php include("include/head.php"); ?>
-  <title>BNC - <?php echo $heads; ?></title>
+  <title>BNC - Konten</title>
   <script src="ckeditor/ckeditor.js"></script>
   <script src="js/expression.js"></script>
 </head>
@@ -100,11 +86,11 @@ if (isset($_GET['actions'])) {
           <div class="container">
             <div class="row">
               <div class="col s12 m12 l12">
-                <h5 class="breadcrumbs-title">Konten</h5>
+                <h5 class="breadcrumbs-title">Ubah Data</h5>
                 <ol class="breadcrumb">
                   <li><a href="index">Beranda</a>
                   </li>
-                  <li class="active"><?php echo $heads; ?></li>
+                  <li class="active">Tambah Konten</li>
                 </ol>
               </div>
             </div>
@@ -122,10 +108,11 @@ if (isset($_GET['actions'])) {
             <!-- Form with validation -->
               <div class="col s12 m12 l6">
                 <div class="card-panel">
+                  <h4 class="header2">Ubah Data</h4>
                   <div class="row">
                     <?php //echo $kontrol->formUbahData($_SESSION['login']); ?>
                     <div class="col s12">
-                        <form action="p_tambahkonten" name="<?php echo $reqs; ?>" id="fomKonten" class="col s12" method="POST">
+                        <form action="p_tambahkonten" name="fomTambahKonten" id="fomTambahKonten" class="col s12" method="POST">
                             <div class="row">
                                 <div class="input-field col s2">
                                   <i class="material-icons mdi-social-person prefix"></i>
@@ -137,7 +124,7 @@ if (isset($_GET['actions'])) {
                             <div class="row">
                                 <div class="input-field col s6">
                                     <i class="material-icons mdi-av-subtitles prefix"></i>
-                                    <input id="judulKonten" name="judulKonten" type="text" class="validate" value="<?php echo $judul; ?>">
+                                    <input id="judulKonten" name="judulKonten" type="text" class="validate">
                                     <label for="judulKonten">Judul Konten (Berita)</label>
                                 </div>
                             </div>
@@ -145,13 +132,13 @@ if (isset($_GET['actions'])) {
                             <div class="row">
                                 <div class="section">
                                     <div class="input-field col s12">
-                                      <textarea id="editor1" name="editor1" class="materialize-textarea"><?php echo $isidata; ?></textarea>
+                                      <textarea id="editor1" name="editor1" class="materialize-textarea"></textarea>
                                       <script>CKEDITOR.replace('editor1');</script>
                                     </div>
                                 </div>
                                 <div class="divider"></div>
                                 <div class="section">
-                                    <input type="hidden" name="dataPost" value="<?php echo $reqs; ?>">
+                                    <input type="hidden" name="dataPost" value="tambahKonten">
                                     <div class="input-field col s12">
                                         <button class="btn waves-effect waves-light right" id="btnSimpan" type="button" name="action">Submit
                                             <i class="mdi-content-save right"></i>
@@ -166,7 +153,7 @@ if (isset($_GET['actions'])) {
                 </div>
               </div>
               <script type="text/javascript">
-                  var fom         = document.getElementById('fomKonten'),
+                  var fom         = document.getElementById('fomTambahKonten'),
                       btn         = document.getElementById('btnSimpan'),
                       judul       = document.getElementById('judulKonten'),
                       dataKonten  = CKEDITOR.instances.editor1,
@@ -178,18 +165,12 @@ if (isset($_GET['actions'])) {
                               return;
                           }
 
-                          /*if (!expression.validation.inputText(
+                          if (!expression.validation.inputText(
                               expression.cleanTag(dataKonten.getData()).trim()
                           )) {
                               expression.modals("Konten yang akan disimpan tidak boleh kosong!!!");
                               return;
-                          }*/
-                          dataKonten.updateElement();
-                          if (dataKonten.getData().length < 12) {
-                            expression.modals("Konten yang akan disimpan tidak boleh kosong!!!");
-                            return;
                           }
-
                           fom.submit();
                       };
                   btn.addEventListener('click', simpan);

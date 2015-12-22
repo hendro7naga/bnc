@@ -35,7 +35,7 @@
                 divFooter.setAttribute('class', 'modal-footer');
 
 
-                htitle.textContent = "Pesan Kesalahan : ";
+                htitle.textContent = "Informasi Aplikasi : ";
                 $(htitle).css({
                     "padding-bottom": "2px",
                     "border-bottom": "1px solid #777"
