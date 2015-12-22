@@ -157,6 +157,8 @@ class ControlAdmin {
   {
     $str = "";
     $str .= '<li class="bold"><a href="#" class="waves-effect waves-cyan"><i class="mdi-communication-email"></i> Info</a></li>';
+    $str .= '<li class="bold"><a class="collapsible-header  waves-effect waves-cyan"><i class="mdi-editor-insert-comment"></i> Produk</a>';
+    $str .= '<div class="collapsible-body"><ul><li><a href="t_produk">Tambah</a></li><li><a href="l_produk">Edit/Hapus</a></li></ul></div></li>';
     $str .= '<li class="bold"><a class="collapsible-header  waves-effect waves-cyan"><i class="mdi-editor-insert-comment"></i> SubMenu</a>';
     $str .= '<div class="collapsible-body"><ul><li><a href="#">Tambah</a></li><li><a href="#">Edit/Hapus</a></li></ul></div></li>';
     $str .= '<li class="bold"><a class="collapsible-header  waves-effect waves-cyan"><i class="mdi-editor-insert-comment"></i> Konten</a>';
@@ -449,21 +451,7 @@ class ControlAdmin {
   // {
   //   $queris = "UPDATE `t_menuinfo_bnc` SET namemenu='".$_POST['uname']."', katmenu='".$_POST['email']."', submenu='".$kontrol->buatPass($_POST['baru'])."', detail_menu = '".$_POST['nama']."' WHERE `id` = '".mysql_real_escape_string($id)."'
   // }
-  
-  /*function cleanTagAndSlicing($content, $lengthSplice) {
-    $data = rtrim(trim(preg_replace("/<.*?>/", " ", $content)));
-    $dataArr = mb_split(" ", $data, mb_substr_count($data, " ") + 1);
 
-    array_splice($dataArr, $lengthSplice);
-    for ($i = 0; $i < count($dataArr); $i += 1) {
-      if ($dataArr[$i] == "") {
-        unset($dataArr[$i]);
-      }
-    }
-    array_values($dataArr);
-    return implode(" ", $dataArr);;
-  }*/
-  
   function showKonten() {
     $q = "SELECT bid, judul, isi, tampildepan FROM t_berita_bnc";
     $data = $this->db->selectData($q);
