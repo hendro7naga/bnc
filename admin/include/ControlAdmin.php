@@ -450,7 +450,7 @@ class ControlAdmin {
   //   $queris = "UPDATE `t_menuinfo_bnc` SET namemenu='".$_POST['uname']."', katmenu='".$_POST['email']."', submenu='".$kontrol->buatPass($_POST['baru'])."', detail_menu = '".$_POST['nama']."' WHERE `id` = '".mysql_real_escape_string($id)."'
   // }
   
-  function cleanTagAndSlicing($content, $lengthSplice) {
+  /*function cleanTagAndSlicing($content, $lengthSplice) {
     $data = rtrim(trim(preg_replace("/<.*?>/", " ", $content)));
     $dataArr = mb_split(" ", $data, mb_substr_count($data, " ") + 1);
 
@@ -462,7 +462,7 @@ class ControlAdmin {
     }
     array_values($dataArr);
     return implode(" ", $dataArr);;
-  }
+  }*/
   
   function showKonten() {
     $q = "SELECT bid, judul, isi, tampildepan FROM t_berita_bnc";
