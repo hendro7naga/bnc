@@ -86,11 +86,11 @@ require_once("../convikx/appsadmin.php");
           <div class="container">
             <div class="row">
               <div class="col s12 m12 l12">
-                <h5 class="breadcrumbs-title">Ubah Data</h5>
+                <h5 class="breadcrumbs-title">Konten</h5>
                 <ol class="breadcrumb">
                   <li><a href="index">Beranda</a>
                   </li>
-                  <li class="active">Tambah Konten</li>
+                  <li class="active">Lihat Konten</li>
                 </ol>
               </div>
             </div>
@@ -102,58 +102,24 @@ require_once("../convikx/appsadmin.php");
         <!--start container-->
         <div class="container">
           <div class="section">
-          NB: Isikan data konten dengan sebenar-benarnya.
+          NB: Sebelum melakukan edit atau hapus data, pastikan dahulu bahwa data tersebut merupakan data yang diinginkan.
             <!-- //////////////////////////////////////////////////////////////////////////// -->
             <div class="divider"></div>
             <!-- Form with validation -->
               <div class="col s12 m12 l6">
                 <div class="card-panel">
-                  <h4 class="header2">Ubah Data</h4>
+                  <h4 class="header2">Data Konten</h4>
+                  <div class="divider"></div>
                   <div class="row">
                     <?php //echo $kontrol->formUbahData($_SESSION['login']); ?>
                     <div class="col s12">
-                        <form action="p_tambahkonten" name="fomTambahKonten" id="fomTambahKonten" class="col s12" method="POST">
-                            <div class="row">
-                                <div class="input-field col s2">
-                                  <i class="material-icons mdi-social-person prefix"></i>
-                                  <input disabled value="Admin" id="author" name="author" type="text" class="validate">
-                                  <label for="author">Author:</label>
-                                </div>
-                            </div>
-                            <div class="divider"></div>
-                            <div class="row">
-                                <div class="input-field col s6">
-                                    <i class="material-icons mdi-av-subtitles prefix"></i>
-                                    <input id="judulKonten" name="judulKonten" type="text" class="validate">
-                                    <label for="judulKonten">Judul Konten (Berita)</label>
-                                </div>
-                            </div>
-                            <div class="divider"></div>
-                            <div class="row">
-                                <div class="section">
-                                    <div class="input-field col s12">
-                                      <textarea id="editor1" name="editor1" class="materialize-textarea"></textarea>
-                                      <script>CKEDITOR.replace('editor1');</script>
-                                    </div>
-                                </div>
-                                <div class="divider"></div>
-                                <div class="section">
-                                    <input type="hidden" name="dataPost" value="tambahKonten">
-                                    <div class="input-field col s12">
-                                        <button class="btn waves-effect waves-light right" id="btnSimpan" type="button" name="action">Submit
-                                            <i class="mdi-content-save right"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- end -->
-                        </form>
+
                     </div>
                   </div>
                 </div>
               </div>
               <script type="text/javascript">
-                  var fom         = document.getElementById('fomTambahKonten'),
+                  /*var fom         = document.getElementById('fomTambahKonten'),
                       btn         = document.getElementById('btnSimpan'),
                       judul       = document.getElementById('judulKonten'),
                       dataKonten  = CKEDITOR.instances.editor1,
@@ -173,7 +139,7 @@ require_once("../convikx/appsadmin.php");
                           }
                           fom.submit();
                       };
-                  btn.addEventListener('click', simpan);
+                  btn.addEventListener('click', simpan);*/
               </script>
         </div>
         <!--end container-->
