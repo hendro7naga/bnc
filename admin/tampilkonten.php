@@ -18,7 +18,19 @@ require_once("../convikx/appsadmin.php");
   <?php include("include/head.php"); ?>
   <title>BNC - Konten</title>
   <script src="ckeditor/ckeditor.js"></script>
-  <script src="js/expression.js"></script>
+  <style type="text/css">
+    #loadInfo {
+      position: fixed;
+      top: 75px;
+      right: 10%;
+      display: none;
+      font-size: 10pt;
+      background-color: #0091ea;
+      color: #333;
+      padding: 2px 6px;
+      box-shadow: 0 0 4px 1px #999;
+    }
+  </style>
 </head>
 
 <body>
@@ -94,10 +106,10 @@ require_once("../convikx/appsadmin.php");
                 </ol>
               </div>
             </div>
+            <span id="loadInfo">Sedang proses...</span>
           </div>
         </div>
         <!--breadcrumbs end-->
-
 
         <!--start container-->
         <div class="container">
@@ -216,9 +228,70 @@ require_once("../convikx/appsadmin.php");
 
     <!--plugins.js - Some Specific JS codes for Plugin Settings-->
     <script type="text/javascript" src="js/plugins.js"></script>
-	<script type="text/javascript" src="js/formaksi.js"></script>
+	  <script type="text/javascript" src="js/formaksi.js"></script>
+    <script src="js/expression.js"></script>
 
+  <!-- untuk validasi delete konten -->
+  <script type="text/javascript">
+  (function () {
+    'use strict';
+    var xhr           = new XMLHttpRequest(),
+        xhrRespon     = function () {
+          if (xhr.readyState === 4) {
+            $("#loadInfo").css("display", "none");
+            if (xhr.status === 200) {
+              var respon = xhr.responseText;
+              if (respon === 1) {
+                var el = document.getElementById(elId);
+                $(el).slideUp().remove();
+                expression.modals("Data berhasil dihapus!!!");
+              } else {
+                expression.modals("Terjadi kesalahan pada server. Harap hubungi pihak developer. Terima kasih!!!");
+              }
+            } else {
+              expression.modals("Terjadi kesalahan. Harap hubungi pihak developer. Terima kasih!!!");
+            }
+          } else {
+            $("#loadInfo").css("display", "block");
+          }
+        },
+        deleteFunc    = function (evt) {
+          evt.stopPropagation();
+          //expression.modals("Cek : " + evt.currentTarget.parentNode.parentNode.id);
+          if (!window.XMLHttpRequest) {
+            expression.modals("Browser tidak mendukung teknologi terbaru kami. Silahkan perbaharui browser Anda.");
+            return;
+          } else {
+            var nodes = evt.currentTarget.parentNode.parentNode;
+            xhr.onreadystatechange = function () {
+              if (xhr.readyState == 4) {
+                $("#loadInfo").css("display", "none");
+                if (xhr.status == 200) {
+                  var respon = xhr.responseText;
+                  if (respon == "1") {
+                    //var el = document.getElementById(elId);
+                    $(nodes).slideUp().remove();
+                    expression.modals("Data berhasil dihapus!!!");
+                  } else {
+                    expression.modals("Terjadi kesalahan pada server. Harap hubungi pihak developer. Terima kasih!!!");
+                  }
+                } else {
+                  expression.modals("Terjadi kesalahan. Harap hubungi pihak developer. Terima kasih!!!");
+                }
+              } else {
+                $("#loadInfo").css("display", "block");
+              }
+            };
+            xhr.open("GET","p_hapuskonten.php?actions=deletekonten&data="+nodes.id, true);
+            xhr.send(null);
+          }
+        };
 
+    $(function () {
+      $('.btnDelete').on('click', deleteFunc);
+    });
+  })(jQuery, window, document);
+  </script>
 
 </body>
 

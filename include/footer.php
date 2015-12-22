@@ -79,7 +79,7 @@ require_once("./convikx/apps.php");
                 <div class="row">
                     <div class="col-md-6">
                         <p>
-                            2015 &copy; All Rights Reserved.
+                            &copy; 2015 Bhineka Nusantara Coffee - All Rights Reserved.
                            <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a>
                         </p>
                     </div>

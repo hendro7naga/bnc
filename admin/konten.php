@@ -17,12 +17,17 @@ if (isset($_GET['actions'])) {
   $heads = null;
   $fomname = null;
   $judul = "";
-  $isidata = "";
-
+  $isiData = "";
+  $kontenId = "";
   if ($reqs == 'tambahkonten') :
     $heads = "Tambah Konten";
   elseif ($reqs == 'editkonten') :
     $heads = "Edit Konten";
+    $kontenId = $_GET['dataid'];
+    $q = "SELECT judul, isi FROM t_berita_bnc WHERE bid='$kontenId'";
+    $data = $kontrol->db->selectDataSingle($q);
+    $judul = $data['judul'];
+    $isiData = $data['isi'];
   endif;
 }
 ?>
@@ -126,6 +131,7 @@ if (isset($_GET['actions'])) {
                     <?php //echo $kontrol->formUbahData($_SESSION['login']); ?>
                     <div class="col s12">
                         <form action="p_tambahkonten" name="<?php echo $reqs; ?>" id="fomKonten" class="col s12" method="POST">
+                            <input type="hidden" name="kontenId" value="<?php echo $kontenId; ?>">
                             <div class="row">
                                 <div class="input-field col s2">
                                   <i class="material-icons mdi-social-person prefix"></i>
@@ -145,8 +151,9 @@ if (isset($_GET['actions'])) {
                             <div class="row">
                                 <div class="section">
                                     <div class="input-field col s12">
-                                      <textarea id="editor1" name="editor1" class="materialize-textarea"><?php echo $isidata; ?></textarea>
+                                      <textarea id="editor1" name="editor1" class="materialize-textarea"><?php echo $isiData; ?></textarea>
                                       <script>CKEDITOR.replace('editor1');</script>
+                                      <br/><div class="divider"></div>
                                     </div>
                                 </div>
                                 <div class="divider"></div>

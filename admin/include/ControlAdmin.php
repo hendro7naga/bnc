@@ -69,7 +69,7 @@ class ControlAdmin {
     $key = "HENDROwaspadaBNConLY";
     $temp = $key.md5($q).sha1($key);
     return md5($temp);
-  } 
+  }
 
   function cekLogin($u, $p)
   {
@@ -82,7 +82,7 @@ class ControlAdmin {
     }
     return "0";
 
-  } 
+  }
 
   function buatPass($q)
   {
@@ -238,7 +238,7 @@ class ControlAdmin {
   } // end formUbahData
 
   // begin untuk upload gambar
-  // function 
+  // function
   // end untuk upload gambar
 
   // begin produk
@@ -284,10 +284,10 @@ class ControlAdmin {
       $h .= '<div id="foto'.$i.'" class="modal modal-fixed-footer"><div class="modal-content">';
       $h .= '<img src="../img/'.$data[$i]["imgProduk"].'" width="100%" height="100%">';
       $h .= '</div><div class="modal-footer"><a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat ">Tutup</a></div></div>';
-      
+
     endfor;
     return $h;
-  } 
+  }
 
   function formubahProduk($q)
   {
@@ -296,7 +296,7 @@ class ControlAdmin {
     for($i=0; $i<count($data); $i++):
 ?>
 
-  <!--Form Advance-->          
+  <!--Form Advance-->
           <div class="row">
             <div class="col s12 m12 l12">
               <div class="card-panel">
@@ -325,7 +325,7 @@ class ControlAdmin {
                         <label>Jenis Produk</label>
                       </div>
                     </div>
-                    
+
                     <div class="row">
                       <div class="input-field col s12">
                       <label>Deskripsi Produk</label>
@@ -373,7 +373,7 @@ class ControlAdmin {
     for($i=0; $i<count($data); $i++):
 ?>
 
-  <!--Form Advance-->          
+  <!--Form Advance-->
           <div class="row">
             <div class="col s12 m12 l12">
               <div class="card-panel">
@@ -402,7 +402,7 @@ class ControlAdmin {
                         <label>Jenis Produk</label>
                       </div>
                     </div>
-                    
+
                     <div class="row">
                       <div class="input-field col s12">
                       <label>Deskripsi Produk</label>
@@ -457,8 +457,8 @@ class ControlAdmin {
     $data = $this->db->selectData($q);
     $str = "";
     for ($i = 0; $i < count($data); $i += 1) :
-      $str .= "<tr><td>" . $data[$i]['judul'] . "</td><td>" . $this->cleanTagAndSlicing($data[$i]['isi'], 10) . "</td><td>
-        <a class=\"btn-floating waves-effect waves-light light-blue darken-4\"><i class=\"material-icons\ small mdi-editor-mode-edit\"></i></a>&nbsp; <a class=\"btn-floating waves-effect waves-light red small\"><i class=\"material-icons\ small mdi-content-clear\"></i></a>
+      $str .= "<tr id=berita_{$data[$i]['bid']}><td>" . $data[$i]['judul'] . "</td><td>" . $this->cleanTagAndSlicing($data[$i]['isi'], 10) . "</td><td>
+        <a href=\"konten?actions=editkonten&dataid=". $data[$i]['bid'] ."\" class=\"btn-floating waves-effect waves-light light-blue darken-4\"><i class=\"material-icons\ small mdi-editor-mode-edit\"></i></a>&nbsp; <a class=\"btn-floating waves-effect waves-light red btnDelete\"><i class=\"material-icons\ small mdi-content-clear\"></i></a>
       </td>";
       $str .= "</tr>" . PHP_EOL;
     endfor;
