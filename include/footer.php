@@ -8,7 +8,7 @@ require_once("./convikx/apps.php");
                 <div class="row">
                     <!-- About -->
                     <div class="col-md-3 md-margin-bottom-40">
-                        <div class="headline"><h2>We are open at</h2></div>
+                        <div class="headline"><h2>Jam dan Hari buka</h2></div>
                         <!--<p>About Unify dolor sit amet, consectetur adipiscing elit. Maecenas eget nisl id libero tincidunt sodales.</p>
                         <p>Duis eleifend fermentum ante ut aliquam. Cras mi risus, dignissim sed adipiscing ut, placerat non arcu.</p>-->
                         <?php
@@ -20,9 +20,9 @@ require_once("./convikx/apps.php");
                     <!-- Latest -->
                     <div class="col-md-3 md-margin-bottom-40">
                         <div class="posts">
-                            <div class="headline"><h2>Latest Posts</h2></div>
+                            <div class="headline"><h2>Berita Terbaru</h2></div>
                             <ul class="list-unstyled latest-list">
-                                <li>
+                                <!--<li>
                                     <a href="#">Incredible content</a>
                                     <small>May 8, 2014</small>
                                 </li>
@@ -33,7 +33,10 @@ require_once("./convikx/apps.php");
                                 <li>
                                     <a href="#">New Terms and Conditions</a>
                                     <small>September 15, 2014</small>
-                                </li>
+                                </li>-->
+                                <?php
+                                  echo $kontrol->getBeritaFooter();
+                                ?>
                             </ul>
                         </div>
                     </div><!--/col-md-3-->
@@ -41,13 +44,13 @@ require_once("./convikx/apps.php");
 
                     <!-- Link List -->
                     <div class="col-md-3 md-margin-bottom-40">
-                        <div class="headline"><h2>Useful Links</h2></div>
+                        <div class="headline"><h2>Link Terkait</h2></div>
                         <ul class="list-unstyled link-list">
-                            <li><a href="#">About us</a><i class="fa fa-angle-right"></i></li>
-                            <li><a href="#">Portfolio</a><i class="fa fa-angle-right"></i></li>
-                            <li><a href="#">Latest jobs</a><i class="fa fa-angle-right"></i></li>
-                            <li><a href="#">Community</a><i class="fa fa-angle-right"></i></li>
-                            <li><a href="#">Contact us</a><i class="fa fa-angle-right"></i></li>
+                            <li><a href="profile/profil.html">Profil</a><i class="fa fa-angle-right"></i></li>
+                            <li><a href="profile/sejarah.html">Sejarah</a><i class="fa fa-angle-right"></i></li>
+                            <li><a href="profile/visi-misi.html">Visi Misi</a><i class="fa fa-angle-right"></i></li>
+                            <li><a href="kontak_kami.html">Kontak Kami</a><i class="fa fa-angle-right"></i></li>
+                            <li><a href="testimoni.html">Testimoni</a><i class="fa fa-angle-right"></i></li>
                         </ul>
                     </div><!--/col-md-3-->
                     <!-- End Link List -->

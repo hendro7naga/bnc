@@ -210,6 +210,33 @@ class ControlAdmin {
   // {
   //   $queris = "UPDATE `t_menuinfo_bnc` SET namemenu='".$_POST['uname']."', katmenu='".$_POST['email']."', submenu='".$kontrol->buatPass($_POST['baru'])."', detail_menu = '".$_POST['nama']."' WHERE `id` = '".mysql_real_escape_string($id)."'
   // }
+  
+  function cleanTagAndSlicing($content, $lengthSplice) {
+    $data = rtrim(trim(preg_replace("/<.*?>/", " ", $content)));
+    $dataArr = mb_split(" ", $data, mb_substr_count($data, " ") + 1);
+
+    array_splice($dataArr, $lengthSplice);
+    for ($i = 0; $i < count($dataArr); $i += 1) {
+      if ($dataArr[$i] == "") {
+        unset($dataArr[$i]);
+      }
+    }
+    array_values($dataArr);
+    return implode(" ", $dataArr);;
+  }
+  
+  function showKonten() {
+    $q = "SELECT bid, judul, isi, tampildepan FROM t_berita_bnc";
+    $data = $this->db->selectData($q);
+    $str = "";
+    for ($i = 0; $i < count($data); $i += 1) :
+      $str .= "<tr><td>" . $data[$i]['judul'] . "</td><td>" . $this->cleanTagAndSlicing($data[$i]['isi'], 10) . "</td><td>
+        <a class=\"btn-floating waves-effect waves-light light-blue darken-4\"><i class=\"material-icons\ small mdi-editor-mode-edit\"></i></a>&nbsp; <a class=\"btn-floating waves-effect waves-light red small\"><i class=\"material-icons\ small mdi-content-clear\"></i></a>
+      </td>";
+      $str .= "</tr>" . PHP_EOL;
+    endfor;
+    return $str;
+  }
 
 }
 

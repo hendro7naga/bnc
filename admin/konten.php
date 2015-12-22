@@ -177,7 +177,6 @@ if (isset($_GET['actions'])) {
                               judul.focus();
                               return;
                           }
-
                           /*if (!expression.validation.inputText(
                               expression.cleanTag(dataKonten.getData()).trim()
                           )) {
@@ -185,7 +184,7 @@ if (isset($_GET['actions'])) {
                               return;
                           }*/
                           dataKonten.updateElement();
-                          if (dataKonten.getData().length < 12) {
+                          if (expression.cleanTag(dataKonten.getData()).trim().length < 12) {
                             expression.modals("Konten yang akan disimpan tidak boleh kosong!!!");
                             return;
                           }

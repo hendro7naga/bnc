@@ -49,7 +49,7 @@ require_once("convikx/apps.php");
     <!--=== Service Block ===-->
     <div class="container">
         <div class="headline-center-v2 headline-center-v2-dark margin-bottom-60">
-            <h2>Welcome To Bn Coffee</h2>
+            <h2>Bhineka Nusantara Coffee</h2>
             <span class="bordered-icon"><i class="fa fa-th-large"></i></span>
             <!--<p>Unify is an incredibly beautiful responsive Bootstrap Template for <a href="#">corporate</a> and creative professionals. It works on all major web browsers, tablets and phone.</p>-->
             <?php
@@ -107,51 +107,15 @@ require_once("convikx/apps.php");
     <!--=== Recent Posts ===-->
     <div class="container content-sm">
         <div class="headline-center-v2 headline-center-v2-dark margin-bottom-60">
-            <h2>Latest News</h2>
+            <h2>Berita Terbaru</h2>
             <span class="bordered-icon"><i class="fa fa-th-large"></i></span>
             <p class="color-green">Informasi atau Berita terbaru dari Bhineka Nusantara Coffee (BN Coffee)</p>
         </div><!--/Headline Center V2-->
 
         <div class="row">
-            <!--<div class="col-sm-4">
-                <div class="thumbnails-v1">
-                    <div class="thumbnail-img">
-                        <img class="img-responsive" src="assets/img/masonry/blog2.jpg" alt="">
-                    </div>
-                    <div class="caption">
-                        <h3><a href="#">Business Opportunities</a></h3>
-                        <p>Donec id elit non mi porta gravida at eget metsit us. Fusce dapibus, justo sit amet risus etiam portapsum generators on the Internet tend to repeat predefined.</p>
-                        <p><a class="read-more" href="#">See More</a></p>
-                    </div>
-                </div>
-            </div>-->
             <?php
               echo $kontrol->getBeritaTerbaru();
             ?>
-            <!--<div class="col-sm-4">
-                <div class="thumbnails-v1">
-                    <div class="thumbnail-img">
-                        <img class="img-responsive" src="assets/img/masonry/blog3.jpg" alt="">
-                    </div>
-                    <div class="caption">
-                        <h3><a href="#">Engage Customers With Unify</a></h3>
-                        <p>If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text, all the  ipsum generators.</p>
-                        <p><a class="read-more" href="#">See More</a></p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <div class="thumbnails-v1">
-                    <div class="thumbnail-img">
-                        <img class="img-responsive" src="assets/img/masonry/blog4.jpg" alt="">
-                    </div>
-                    <div class="caption">
-                        <h3><a href="#">Empower People, HCM</a></h3>
-                        <p>Donec id elit non mi porta gravida at eget metsit us. Fusce dapibus, justo sit amet risus etiam portapsum generators on the Internet tend to repeat predefined.</p>
-                        <p><a class="read-more" href="#">See More</a></p>
-                    </div>
-                </div>
-            </div>-->
         </div>
     </div><!--/container-->
     <!--=== End Recent Posts ===-->

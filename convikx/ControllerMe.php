@@ -314,7 +314,6 @@ class ControllerMe {
     }
     return $str;
   }
-
   /*.. end of middle ...*/
 
   /*... for footer ...*/
@@ -324,16 +323,20 @@ class ControllerMe {
     $dataLokasi = $this->db->selectDataSingle($q);
     $str = "<address class=md-margin-bottom-40>" . PHP_EOL;
     $str .= $dataLokasi['infoKonten'] . PHP_EOL;
-    /*for ($i = 0; $i < count($dataLokasi); $i += 1) {
-      $str .= $dataLokasi[$i]['infoJalan'] . " ";
-      $str .= $dataLokasi[$i]['infoKota'];
-      $str .= ", ".$dataLokasi[$i]['infoProvinsi'] . "<br/>" . PHP_EOL;
-      $str .= $dataLokasi[$i]['infoNegara'] . "<br/>" . PHP_EOL;
-      $str .= "Phone: " . $dataLokasi[$i]['infoTelepon'] . "<br/>" . PHP_EOL;
-      $str .= "Fax: " . $dataLokasi[$i]['infoFax'] . "<br/>" . PHP_EOL;
-      $str .= "Email: <a href=mailto:{$dataLokasi[$i]['infoMails']} class=>" . $dataLokasi[$i]['infoMails'] . "</a>" . PHP_EOL;
-    }*/
     $str .= "</address>" . PHP_EOL;
+    return $str;
+  }
+  
+  function getBeritaFooter() {
+    $q = "SELECT bid, judul, tanggal FROM t_berita_bnc ORDER BY tanggal LIMIT 3";
+    $data = $this->db->selectData($q);
+    $str = "";
+    for ($i = 0; $i < count($data); $i += 1) {
+      $str .= "<li>
+                  <a href=berita_{$data[$i]['bid']}/".$this->cleanUrl($data[$i]['judul']).".html>{$data[$i]['judul']}</a>
+                  <small>". $this->ubahTimeStamp($data[$i]['tanggal']) ."</small>
+              </li>" . PHP_EOL;
+    }
     return $str;
   }
 
