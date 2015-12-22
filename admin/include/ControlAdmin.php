@@ -34,12 +34,42 @@ class ControlAdmin {
     }
   }
 
+  function cleanTagAndSlicing($content, $lengthSplice, $return = null) {
+    $data = rtrim(trim(preg_replace("/<.*?>/", " ", $content)));
+    $dataArr = mb_split(" ", $data, mb_substr_count($data, " ") + 1);
+
+    array_splice($dataArr, $lengthSplice);
+    for ($i = 0; $i < count($dataArr); $i += 1) {
+      if ($dataArr[$i] == "") {
+        unset($dataArr[$i]);
+      }
+    }
+    if($return != null)
+    {
+      return count($dataArr);
+    }
+    else
+    {
+      array_values($dataArr);
+      return implode(" ", $dataArr);
+    }
+  }
+
+  function rupiah($num){
+  if($num <= 0){
+    return "Rp. 0";
+  }else{
+    $rp=number_format($num,0,",",".");
+    return "Rp. ".$rp;
+    }
+  }
+
   function ekripPass($q)
   {
     $key = "HENDROwaspadaBNConLY";
     $temp = $key.md5($q).sha1($key);
     return md5($temp);
-  }
+  } 
 
   function cekLogin($u, $p)
   {
@@ -52,7 +82,7 @@ class ControlAdmin {
     }
     return "0";
 
-  }
+  } 
 
   function buatPass($q)
   {
@@ -127,10 +157,12 @@ class ControlAdmin {
   {
     $str = "";
     $str .= '<li class="bold"><a href="#" class="waves-effect waves-cyan"><i class="mdi-communication-email"></i> Info</a></li>';
+    $str .= '<li class="bold"><a class="collapsible-header  waves-effect waves-cyan"><i class="mdi-editor-insert-comment"></i> Produk</a>';
+    $str .= '<div class="collapsible-body"><ul><li><a href="t_produk">Tambah</a></li><li><a href="l_produk">Edit/Hapus</a></li></ul></div></li>';
     $str .= '<li class="bold"><a class="collapsible-header  waves-effect waves-cyan"><i class="mdi-editor-insert-comment"></i> SubMenu</a>';
     $str .= '<div class="collapsible-body"><ul><li><a href="#">Tambah</a></li><li><a href="#">Edit/Hapus</a></li></ul></div></li>';
     $str .= '<li class="bold"><a class="collapsible-header  waves-effect waves-cyan"><i class="mdi-editor-insert-comment"></i> Konten</a>';
-    $str .= '<div class="collapsible-body"><ul><li><a href="konten?actions=tambahkonten">Tambah</a></li><li><a href="tampilkonten">Edit/Hapus</a></li></ul></div></li>';
+    $str .= '<div class="collapsible-body"><ul><li><a href="#">Tambah</a></li><li><a href="#">Edit/Hapus</a></li></ul></div></li>';
     $str .= '<li class="bold"><a href="#" class="waves-effect waves-cyan"><i class="mdi-communication-email"></i> Kontak Kami <span class="new badge">4</span></a></li>';
     $str .= '<li class="bold"><a href="#" class="waves-effect waves-cyan"><i class="mdi-communication-email"></i> Testimoni <span class="new badge">4</span></a></li>';
     $str .= '<li class="bold"><a href="#" class="waves-effect waves-cyan"><i class="mdi-communication-email"></i> Ucapan </a></li>';
@@ -149,7 +181,6 @@ class ControlAdmin {
   {
     $q = "SELECT * FROM t_menuinfo_bnc WHERE namemenu = '".$this->db->amanin($u)."'";
     $data = $this->db->selectData($q);
-    $h = "";
     for($i=0; $i<count($data); $i++):
 ?>
 
@@ -205,6 +236,216 @@ class ControlAdmin {
 
     endfor;
   } // end formUbahData
+
+  // begin untuk upload gambar
+  // function 
+  // end untuk upload gambar
+
+  // begin produk
+  function insertProduk($nama, $img=NULL, $harga, $tipe, $status, $des)
+  {
+    $q = "INSERT INTO `t_produk_bnc` (`id`, `namaProduk`, `imgProduk`, `hargaProduk`, `tipeProduk`, `status`, `tglBuat`, `descProduk`) VALUES (NULL, '$nama', '$img', '$harga', '$tipe', '$status', CURRENT_TIMESTAMP, '$des')";
+    $h = $this->db->insertData($q);
+    if(!$h)
+      return "0";
+    return "1";
+  }
+
+  function updateProduk($nama, $img=NULL, $harga, $tipe, $status, $des, $id)
+  {
+    $q = "UPDATE `t_produk_bnc` set `namaProduk` = '$nama', `hargaProduk` = '$harga', `tipeProduk` = '$tipe', `status` = '$status', `descProduk` = '$des' WHERE id = '".$this->db->amanin($id)."'";
+    $h = $this->db->insertData($q);
+    if(!$h)
+      return "0";
+    return "1";
+  }
+
+  function hapusProduk($id)
+  {
+    $q = "DELETE from `t_produk_bnc` WHERE id = '".$this->db->amanin($id)."'";
+    $h = $this->db->insertData($q);
+    if(!$h)
+      return "0";
+    return "1";
+  }
+
+  function laporanProduk()
+  {
+    $q = "SELECT * FROM t_produk_bnc order by id DESC";
+    $data = $this->db->selectData($q);
+    $h = "";
+    for($i=0; $i<count($data); $i++):
+      $h .= '<tr><td class="tooltipped z-depth-2" data-tooltip="'.$data[$i]["namaProduk"].'" data-position="top">'.(($this->cleanTagAndSlicing($data[$i]["namaProduk"], 9, 1) > 5) ? $this->cleanTagAndSlicing($data[$i]["namaProduk"], 9)."...": $data[$i]["namaProduk"]).'</td><td>'.$this->rupiah($data[$i]["hargaProduk"]).'</td><td><a class="waves-effect waves-light btn modal-trigger" href="#foto'.$i.'">Lihat</a></td>';
+      $h .= '<td>'.(($data[$i]["tipeProduk"] == "1") ? "Makanan" : "Minuman").'</td><td>'.(($data[$i]["status"] == "1") ? "Tampil" : "Tdk Tampil").'</td><td>'.$this->ubahTimeStamp($data[$i]["tglBuat"]).'</td>';
+      $h .= '<td>';
+      $h .= '<a href="produk_aksi?a=e&q='.$data[$i]["id"].'" class="btn-floating waves-effect waves-light light-blue tooltipped z-depth-2" data-position="left" data-tooltip="Edit '.$data[$i]["namaProduk"].'"><i class=" mdi-editor-mode-edit"></i></a>';
+      $h .= '<a href="produk_aksi?a=x&q='.$data[$i]["id"].'"" class="btn-floating waves-effect waves-light light-red tooltipped z-depth-2" data-position="left" data-tooltip="Hapus '.$data[$i]["namaProduk"].'"><i class=" mdi-content-clear"></i></a>';
+      $h .= '</td></tr>';
+      $h .= '<div id="foto'.$i.'" class="modal modal-fixed-footer"><div class="modal-content">';
+      $h .= '<img src="../img/'.$data[$i]["imgProduk"].'" width="100%" height="100%">';
+      $h .= '</div><div class="modal-footer"><a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat ">Tutup</a></div></div>';
+      
+    endfor;
+    return $h;
+  } 
+
+  function formubahProduk($q)
+  {
+    $queris = "SELECT * FROM t_produk_bnc WHERE id = '".$this->db->amanin($q)."'";
+    $data = $this->db->selectData($queris);
+    for($i=0; $i<count($data); $i++):
+?>
+
+  <!--Form Advance-->          
+          <div class="row">
+            <div class="col s12 m12 l12">
+              <div class="card-panel">
+                <h4 class="header2">Edit Produk</h4>
+                <div class="row">
+                  <form class="col s12" method="post" id="bnc" action="s_produk?exc">
+                    <div class="row">
+                      <div class="input-field col s12">
+                        <input id="nama" name="nama" type="text" value="<?php echo $data[$i]["namaProduk"]; ?>">
+                        <label for="nama">Nama Produk</label>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="input-field col s12">
+                        <input id="harga" name="harga" type="text" value="<?php echo $data[$i]["hargaProduk"]; ?>">
+                        <label for="harga">Harga</label>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="input-field col s6">
+                        <select name="jenis">
+                          <option value="" disabled selected>Pilih Jenis Produk</option>
+                          <option value="1" <?php echo ($data[$i]["tipeProduk"] == "1") ? 'selected':''; ?>>Makanan</option>
+                          <option value="2" <?php echo ($data[$i]["tipeProduk"] == "2") ? 'selected':''; ?>>Minuman</option>
+                        </select>
+                        <label>Jenis Produk</label>
+                      </div>
+                    </div>
+                    
+                    <div class="row">
+                      <div class="input-field col s12">
+                      <label>Deskripsi Produk</label>
+                      <br/><br/><br/>
+                        <textarea id="message5" class="ckeditor" name="des"><?php echo $data[$i]["descProduk"]; ?></textarea>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="input-field col s6">
+                        <select name="tampil">
+                          <option value="" disabled selected>Tampil/Tidak</option>
+                          <option value="1" <?php echo ($data[$i]["status"] == "1") ? 'selected':''; ?>>Ya</option>
+                          <option value="0" <?php echo ($data[$i]["status"] == "0") ? 'selected':''; ?>>Tidak</option>
+                        </select>
+                        <label>Tampil/Tidak</label>
+                      </div>
+                      <div class="row">
+                        <div class="input-field col s12">
+                          <button class="btn cyan waves-effect waves-light right" type="submit" name="action" onClick="CKupdate();">Simpan
+                            <i class="mdi-content-send right"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <input type="hidden" name="id" value="<?php echo $data[$i]["id"]; ?>" />
+                    <div id="tunggu" style="display:none;"><img src="../img/loading01.gif" alt="loading..." width="100px" height="100px" /> Loading...</div>
+                    <div id="hasil"></div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <!--end container-->
+
+<?php
+    endfor;
+  }
+
+  function formhapusProduk($q)
+  {
+    $queris = "SELECT * FROM t_produk_bnc WHERE id = '".$this->db->amanin($q)."'";
+    $data = $this->db->selectData($queris);
+    for($i=0; $i<count($data); $i++):
+?>
+
+  <!--Form Advance-->          
+          <div class="row">
+            <div class="col s12 m12 l12">
+              <div class="card-panel">
+                <h4 class="header2">Apa Anda yakin menghapus produk ini?</h4>
+                <div class="row">
+                  <form class="col s12" method="post" id="bnc" action="s_produk?exc">
+                    <div class="row">
+                      <div class="input-field col s12">
+                        <input id="nama" name="nama" type="text" value="<?php echo $data[$i]["namaProduk"]; ?>">
+                        <label for="nama">Nama Produk</label>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="input-field col s12">
+                        <input id="harga" name="harga" type="text" value="<?php echo $data[$i]["hargaProduk"]; ?>">
+                        <label for="harga">Harga</label>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="input-field col s6">
+                        <select name="jenis">
+                          <option value="" disabled selected>Pilih Jenis Produk</option>
+                          <option value="1" <?php echo ($data[$i]["tipeProduk"] == "1") ? 'selected':''; ?>>Makanan</option>
+                          <option value="2" <?php echo ($data[$i]["tipeProduk"] == "2") ? 'selected':''; ?>>Minuman</option>
+                        </select>
+                        <label>Jenis Produk</label>
+                      </div>
+                    </div>
+                    
+                    <div class="row">
+                      <div class="input-field col s12">
+                      <label>Deskripsi Produk</label>
+                      <br/><br/><br/>
+                        <textarea id="message5" class="ckeditor" name="des"><?php echo $data[$i]["descProduk"]; ?></textarea>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="input-field col s6">
+                        <select name="tampil">
+                          <option value="" disabled selected>Tampil/Tidak</option>
+                          <option value="1" <?php echo ($data[$i]["status"] == "1") ? 'selected':''; ?>>Ya</option>
+                          <option value="0" <?php echo ($data[$i]["status"] == "0") ? 'selected':''; ?>>Tidak</option>
+                        </select>
+                        <label>Tampil/Tidak</label>
+                      </div>
+                      <div class="row">
+                        <div class="input-field col s12">
+                          <button class="btn cyan waves-effect waves-light right" type="submit" name="action">Hapus Produk
+                            <i class="mdi-content-send right"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <input type="hidden" name="id" value="<?php echo $data[$i]["id"]; ?>" />
+                    <input type="hidden" name="en" value="takedown" />
+                    <div id="tunggu" style="display:none;"><img src="../img/loading01.gif" alt="loading..." width="100px" height="100px" /> Loading...</div>
+                    <div id="hasil"></div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <!--end container-->
+
+<?php
+    endfor;
+  }
+
+
+  // end produk
 
   // function updateData()
   // {
