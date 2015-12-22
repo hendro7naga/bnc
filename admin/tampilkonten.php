@@ -113,7 +113,7 @@ require_once("../convikx/appsadmin.php");
                   <div class="row">
                     <?php //echo $kontrol->formUbahData($_SESSION['login']); ?>
                     <div class="col s12">
-                      <table class="striped">
+                      <table class="bordered striped">
                         <thead>
                           <tr>
                               <th data-field="id">Judul</th>

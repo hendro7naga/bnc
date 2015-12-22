@@ -3,12 +3,12 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="msapplication-tap-highlight" content="no">
 <!-- Favicons-->
-<link rel="icon" href="images/favicon/favicon-32x32.png" sizes="32x32">
+<link rel="icon" href="../../bnfavicon.ico" sizes="32x32">
 <!-- Favicons-->
-<link rel="apple-touch-icon-precomposed" href="images/favicon/apple-touch-icon-152x152.png">
+<link rel="apple-touch-icon-precomposed" href="../../bnfavicon.ico">
 <!-- For iPhone -->
 <meta name="msapplication-TileColor" content="#00bcd4">
-<meta name="msapplication-TileImage" content="images/favicon/mstile-144x144.png">
+<meta name="msapplication-TileImage" content="../../bnfavicon.ico">
 <!-- For Windows Phone -->
 
 
