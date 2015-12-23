@@ -257,39 +257,43 @@ require_once("../convikx/appsadmin.php");
         },
         deleteFunc    = function (evt) {
           evt.stopPropagation();
-          //expression.modals("Cek : " + evt.currentTarget.parentNode.parentNode.id);
-          if (!window.XMLHttpRequest) {
-            expression.modals("Browser tidak mendukung teknologi terbaru kami. Silahkan perbaharui browser Anda.");
-            return;
-          } else {
-            var nodes = evt.currentTarget.parentNode.parentNode;
-            xhr.onreadystatechange = function () {
-              if (xhr.readyState == 4) {
-                $("#loadInfo").css("display", "none");
-                if (xhr.status == 200) {
-                  var respon = xhr.responseText;
-                  if (respon == "1") {
-                    //var el = document.getElementById(elId);
-                    $(nodes).slideUp().remove();
-                    expression.modals("Data berhasil dihapus!!!");
+          if (confirm('Apa Anda yakin menghapus data ini?')) {
+
+            //expression.modals("Cek : " + evt.currentTarget.parentNode.parentNode.id);
+            if (!window.XMLHttpRequest) {
+              expression.modals("Browser tidak mendukung teknologi terbaru kami. Silahkan perbaharui browser Anda.");
+              return;
+            } else {
+              var nodes = evt.currentTarget.parentNode.parentNode;
+              xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+                  $("#loadInfo").css("display", "none");
+                  if (xhr.status == 200) {
+                    var respon = xhr.responseText;
+                    if (respon == "1") {
+                      //var el = document.getElementById(elId);
+                      $(nodes).slideUp().remove();
+                      expression.modals("Data berhasil dihapus!!!");
+                    } else {
+                      expression.modals("Terjadi kesalahan pada server. Harap hubungi pihak developer. Terima kasih!!!");
+                    }
                   } else {
-                    expression.modals("Terjadi kesalahan pada server. Harap hubungi pihak developer. Terima kasih!!!");
+                    expression.modals("Terjadi kesalahan. Harap hubungi pihak developer. Terima kasih!!!");
                   }
                 } else {
-                  expression.modals("Terjadi kesalahan. Harap hubungi pihak developer. Terima kasih!!!");
+                  $("#loadInfo").css("display", "block");
                 }
-              } else {
-                $("#loadInfo").css("display", "block");
-              }
-            };
-            xhr.open("GET","p_hapuskonten.php?actions=deletekonten&data="+nodes.id, true);
-            xhr.send(null);
+              };
+              xhr.open("GET","p_hapuskonten.php?actions=deletekonten&data="+nodes.id, true);
+              xhr.send(null);
+            }
           }
         };
 
     $(function () {
       $('.btnDelete').on('click', deleteFunc);
     });
+  
   })(jQuery, window, document);
   </script>
 
