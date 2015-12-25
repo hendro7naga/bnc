@@ -165,7 +165,7 @@ class ControlAdmin {
     $str .= '<div class="collapsible-body"><ul><li><a href="konten?actions=tambahkonten">Tambah</a></li><li><a href="tampilkonten">Edit/Hapus</a></li></ul></div></li>';
     $str .= '<li class="bold"><a href="#" class="waves-effect waves-cyan"><i class="mdi-communication-email"></i> Kontak Kami <span class="new badge">4</span></a></li>';
     $str .= '<li class="bold"><a href="#" class="waves-effect waves-cyan"><i class="mdi-communication-email"></i> Testimoni <span class="new badge">4</span></a></li>';
-    $str .= '<li class="bold"><a href="#" class="waves-effect waves-cyan"><i class="mdi-communication-email"></i> Ucapan </a></li>';
+    $str .= '<li class="bold"><a href="ucapan" class="waves-effect waves-cyan"><i class="mdi-communication-email"></i> Ucapan </a></li>';
     $str .= '<li class="bold"><a href="?keluar" class="waves-effect waves-cyan"><i class="mdi-hardware-keyboard-tab"></i> Keluar </a></li>';
     return $str;
   }
