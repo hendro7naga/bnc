@@ -78,6 +78,11 @@
           return (patterns.test(data)) ? true : false;
             //return tmpData;
         }
+      },
+      imgExt: function (strName) {
+        var patterns  = /[\w\W](.jpg|.JPG)$/,
+            ds        = "";
+        return patterns.test(strName);
       }
     }
   };

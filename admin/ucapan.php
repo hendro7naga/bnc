@@ -17,8 +17,8 @@ require_once("../convikx/appsadmin.php");
 <head>
   <?php include("include/head.php"); ?>
   <title>BNC - Ucapan</title>
-  <script src="ckeditor/ckeditor.js"></script>
   <script src="js/expression.js"></script>
+  <link rel="stylesheet" type="text/css" href="css/custom.css">
 </head>
 
 <body>
@@ -94,6 +94,7 @@ require_once("../convikx/appsadmin.php");
                 </ol>
               </div>
             </div>
+            <span id="loadInfo">Sedang proses...</span>
           </div>
         </div>
         <!--breadcrumbs end-->
@@ -116,19 +117,6 @@ require_once("../convikx/appsadmin.php");
                       $data = $kontrol->db->selectDataSingle($q);
                       ?>
                       <!-- start here -->
-                      <div class="section">
-                        <span>Ubah Gambar : </span>
-                        <div class="file-field input-field">
-                          <div class="btn">
-                            <span>File</span>
-                            <input type="file" id="ubahgambar">
-                          </div>
-                          <div class="file-path-wrapper">
-                            <input class="file-path validate" type="text">
-                          </div>
-                        </div><br/>
-                        <img class="responsive-img" src="../img/<?php echo $data['gambarUtama']; ?>" alt="" />
-                      </div>
                       <div class="divider"></div>
                       <div class="section">
                         <div class="input-field col s12">
@@ -153,27 +141,7 @@ require_once("../convikx/appsadmin.php");
                 </div>
               </div>
               <script type="text/javascript">
-                  /*var fom         = document.getElementById('fomKonten'),
-                      btn         = document.getElementById('btnSimpan'),
-                      judul       = document.getElementById('judulKonten'),
-                      dataKonten  = CKEDITOR.instances.editor1,
-                      simpan      = function (evt) {
-                          evt.stopPropagation();
-                          if (!expression.validation.inputText(judul.value, 2)) {
-                              expression.modals("Harap isikan judul dengan benar!");
-                              judul.focus();
-                              return;
-                          }
-
-                          dataKonten.updateElement();
-                          if (expression.cleanTag(dataKonten.getData()).trim().length < 12) {
-                            expression.modals("Konten yang akan disimpan tidak boleh kosong!!!");
-                            return;
-                          }
-
-                          fom.submit();
-                      };
-                  btn.addEventListener('click', simpan);*/
+                  /*js script*/
               </script>
         </div>
         <!--end container-->
@@ -228,42 +196,101 @@ require_once("../convikx/appsadmin.php");
     <script type="text/javascript">
     (function () {
       'use strict';
-      var xhr           = new XMLHttpRequest(),
+      var sectionInput  = $('#inputsection'),
           btnEdit       = $('#btnedit'),
           btnSimpan     = $('#btnsimpan'),
           btnBatal      = $('#btnbatal'),
           konten        = $('#kontenucapan'),
-          xhrRespon     = function () {
-            /*if (xhr.readyState === 4) {
-              $("#loadInfo").css("display", "none");
-              if (xhr.status === 200) {
-                var respon = xhr.responseText;
-                if (respon === 1) {
-                  var el = document.getElementById(elId);
-                  $(el).slideUp().remove();
-                  expression.modals("Data berhasil dihapus!!!");
-                } else {
-                  expression.modals("Terjadi kesalahan pada server. Harap hubungi pihak developer. Terima kasih!!!");
-                }
-              } else {
-                expression.modals("Terjadi kesalahan. Harap hubungi pihak developer. Terima kasih!!!");
-              }
+          tmpKonten     = "",
+          hideNodes     = function (evt) {
+            ect.stopPropagation();
+          },
+          xhrRespon     = function (fomDatas, strUrl) {
+            var xhr     = new XMLHttpRequest(),
+                methods = "";
+            if (!window.XMLHttpRequest) {
+              expression.modals("Browser Anda tidak mendukung teknologi AJAX. Silahkan upgrade Browser ke versi terbaru agar aplikasi dapat berjalan dengan baik.");
+              return;
             } else {
-              $("#loadInfo").css("display", "block");
+              methods = (fomDatas == undefined || fomDatas == null) ? "GET" : "POST";
+
+              xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+                  $("#loadInfo").css("display", "none");
+                  if (xhr.status == 200) {
+                    var respon = xhr.responseText;
+                    if (respon) {
+                      expression.modals("Proses Berhasil!!!");
+                    } else {
+                      expression.modals("Terjadi kesalahan pada server. Harap hubungi pihak developer. Terima kasih!!!");
+                    }
+                  } else {
+                    expression.modals("Terjadi kesalahan. Harap hubungi pihak developer. Terima kasih!!!");
+                  }
+                } else {
+                  $("#loadInfo").css("display", "block");
+                }
+              };
+
+              xhr.open(methods, strUrl);
+              if (methods == "POST") {
+                xhr.send(fomDatas);
+              } else {
+                xhr.send(null);
+              }
+            }
+            //end of line xhr
+          },
+          funcSendImg = function (evt) {
+            /*evt.stopPropagation();
+            var fomData = new FormData(),
+                strUrl  = "file_uploader.php",
+                elImg   = document.getElementById("ubahgambar");
+            if (expression.validation.imgExt(evt.target.value)) {
+              fomData.append("imgupload", elImg.files[0]);
+              fomData.append("details", "ucapan");
+              xhrRespon(fomData, strUrl);
+            }
+            else {
+              expression.modals("Format gambar tidak sesuai. Gambar harus berekstensi .jpg");
             }*/
           },
           editFunc    = function (evt) {
             evt.stopPropagation();
             kontenucapan.removeAttribute("readonly");
+            tmpKonten = kontenucapan.value;
             $(btnEdit).css("display", "none");
             $(btnSimpan).css("display", "inline-block");
             $(btnBatal).css("display", "inline-block");
             //alert(evt.target.nodeName);
+          },
+          sendEditFunc = function (evt) {
+            evt.stopPropagation();
+            var fomData = new FormData();
+            fomData.append("konten", kontenucapan.value);
+            xhrRespon(fomData, "p_ucapan.php");
+            kontenucapan.setAttribute("readonly", "readonly");
+            $(btnEdit).css("display", "inline-block");
+            $(btnSimpan).css("display", "none");
+            $(btnBatal).css("display", "none");
+          },
+          batalEditFunc = function (evt) {
+            evt.stopPropagation();
+            kontenucapan.value = tmpKonten;
+            kontenucapan.setAttribute("readonly", "readonly");
+            $(btnEdit).css("display", "inline-block");
+            $(btnSimpan).css("display", "none");
+            $(btnBatal).css("display", "none");
           };
 
       $(function () {
         //$('.btnDelete').on('click', deleteFunc);
+        //$(btnEditImg).on('click', funcEditImg);
+        //$(btnBatalImg).on('click', funcBatalEditImg);
         $(btnEdit).on('click', editFunc);
+        $(btnBatal).on('click', batalEditFunc);
+        $(btnSimpan).on('click', sendEditFunc);
+        //$(inputUbahGbr).on('change', funcSendImg);
       });
 
     })(jQuery, window, document);
