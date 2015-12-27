@@ -163,8 +163,8 @@ class ControlAdmin {
     $str .= '<div class="collapsible-body"><ul><li><a href="#">Tambah</a></li><li><a href="#">Edit/Hapus</a></li></ul></div></li>';
     $str .= '<li class="bold"><a class="collapsible-header  waves-effect waves-cyan"><i class="mdi-editor-insert-comment"></i> Konten</a>';
     $str .= '<div class="collapsible-body"><ul><li><a href="konten?actions=tambahkonten">Tambah</a></li><li><a href="tampilkonten">Edit/Hapus</a></li></ul></div></li>';
-    $str .= '<li class="bold"><a href="#" class="waves-effect waves-cyan"><i class="mdi-communication-email"></i> Kontak Kami <span class="new badge">4</span></a></li>';
-    $str .= '<li class="bold"><a href="#" class="waves-effect waves-cyan"><i class="mdi-communication-email"></i> Testimoni <span class="new badge">4</span></a></li>';
+    $str .= '<li class="bold"><a href="l_kontak" class="waves-effect waves-cyan"><i class="mdi-communication-email"></i> Kontak Kami '.(($this->countUnreadKontak() > 0) ? ' <span class="new badge">'.$this->countUnreadKontak().'</span></a>':'').'</li>';
+    $str .= '<li class="bold"><a href="l_testimoni" class="waves-effect waves-cyan"><i class="mdi-communication-email"></i> Testimoni '.(($this->countUnreadTestimoni() > 0) ? ' <span class="new badge">'.$this->countUnreadTestimoni().'</span></a>':'').'</li>';
     $str .= '<li class="bold"><a href="ucapan" class="waves-effect waves-cyan"><i class="mdi-communication-email"></i> Ucapan </a></li>';
     $str .= '<li class="bold"><a href="?keluar" class="waves-effect waves-cyan"><i class="mdi-hardware-keyboard-tab"></i> Keluar </a></li>';
     return $str;
@@ -447,11 +447,6 @@ class ControlAdmin {
 
   // end produk
 
-  // function updateData()
-  // {
-  //   $queris = "UPDATE `t_menuinfo_bnc` SET namemenu='".$_POST['uname']."', katmenu='".$_POST['email']."', submenu='".$kontrol->buatPass($_POST['baru'])."', detail_menu = '".$_POST['nama']."' WHERE `id` = '".mysql_real_escape_string($id)."'
-  // }
-
   function showKonten() {
     $q = "SELECT bid, judul, isi, tampildepan FROM t_berita_bnc";
     $data = $this->db->selectData($q);
@@ -464,6 +459,131 @@ class ControlAdmin {
     endfor;
     return $str;
   }
+
+  // begin kontak testimoni
+  function countUnreadKontak()
+  {
+    $q = "SELECT count(id) as byk FROM t_kontak_bnc WHERE status = '2'";
+    $data = $this->db->selectDataSingle($q);
+    return $data["byk"];
+  }
+
+  function statusKontakid($s)
+  {
+    if($s == "1")
+      return "Sudah Dibaca.";
+    elseif($s == "2")
+      return "Belum Dibaca.";
+    elseif($s == "3")
+      return "Belum Direspon.";
+    elseif($s == "4")
+      return "Sudah Direspon.";
+  }
+
+  function statusKontaken($s)
+  {
+    if($s == "2")
+      return "Unread.";
+    elseif($s == "3")
+      return "Not Replied.";
+    elseif($s == "4")
+      return "Replied.";
+  }
+
+  function updateKontakStatus($id)
+  {
+    $q = "UPDATE t_kontak_bnc set status = '3' WHERE id = '".$this->db->amanin($id)."'";
+    $h = $this->db->insertData($q);
+    if(!$h)
+      return "0";
+    return "1";
+  }
+
+  function getKontak($id)
+  {
+    $q = "SELECT * FROM t_kontak_bnc WHERE id = '".$this->db->amanin($id)."'";
+    $data = $this->db->selectData($q);
+    $h = "";
+    for($i=0; $i<count($data); $i++):
+      $h .= 'Dari : '.$data[$i]["nama"]."<br/>";
+      $h .= 'E-Mail : '.$data[$i]["email"]."<br/>";
+      $h .= "Tgl : ".$this->ubahTimeStamp($data[$i]["tgl"])."<br/>";
+      $h .= "Pesan :<br/>";
+      $h .= $data[$i]["pesan"];
+      $h .= '<br/><a href=javascript:window.close();>Tutup</a>';
+    endfor;
+    return $h;
+  }
+
+  function getTestimoni($id)
+  {
+    $q = "SELECT * FROM t_testimoni_bnc WHERE id = '".$this->db->amanin($id)."'";
+    $data = $this->db->selectData($q);
+    $h = "";
+    for($i=0; $i<count($data); $i++):
+      $h .= 'Dari : '.$data[$i]["nama"]."<br/>";
+      $h .= 'E-Mail : '.$data[$i]["email"]."<br/>";
+      $h .= "Tgl : ".$this->ubahTimeStamp($data[$i]["tgl"])."<br/>";
+      $h .= "Testimoni :<br/>";
+      $h .= $data[$i]["pesan"];
+      $h .= '<br/><a href=javascript:window.close();>Tutup</a>';
+    endfor;
+    return $h;
+  }
+
+  function countUnreadTestimoni()
+  {
+    $q = "SELECT count(id) as byk FROM t_testimoni_bnc WHERE status = '3'";
+    $data = $this->db->selectDataSingle($q);
+    return $data["byk"];
+  }
+
+  function laporanKontak()
+  {
+    $q = "SELECT * FROM t_kontak_bnc order by tgl DESC";
+    $data = $this->db->selectData($q);
+    $h = "";
+    for($i=0; $i<count($data); $i++):
+      $h .= '<tr><td class="tooltipped z-depth-2" data-tooltip=" Dari : '.$data[$i]["nama"].'" data-position="top">'.$data[$i]["nama"].'</td><td>'.$data[$i]["email"].'</td>';
+      $h .= '<td><a class="waves-effect waves-light btn modal-trigger" href="readkontak?id='.$data[$i]["id"].'" target="_blank">Baca</a></td>';
+      $h .= '<td>'.$this->ubahTimeStamp($data[$i]["tgl"]).'</td><td>'.$this->statusKontaken($data[$i]["status"]).'</td>';
+      $h .= '<td>';
+      $h .= '<a href="produk_aksi?a=e&q='.$data[$i]["id"].'" class="btn-floating waves-effect waves-light light-blue tooltipped z-depth-2" data-position="left" data-tooltip="Edit Dari '.$data[$i]["nama"].'"><i class=" mdi-editor-mode-edit"></i></a>';
+      $h .= '<a href="produk_aksi?a=x&q='.$data[$i]["id"].'"" class="btn-floating waves-effect waves-light light-red tooltipped z-depth-2" data-position="left" data-tooltip="Hapus Dari '.$data[$i]["nama"].'"><i class=" mdi-content-clear"></i></a>';
+      $h .= '</td></tr>';
+      // $h .= '<div id="pesan'.$i.'" class="modal modal-fixed-footer"><div class="modal-content">';
+      // $h .= $data[$i]["pesan"];
+      // $h .= $this->updateKontakStatus($data[$i]["id"]);
+      // $h .= '</div><div class="modal-footer"><a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat ">Tutup</a></div></div>';
+
+    endfor;
+    return $h;
+  }
+
+  function laporanTestimoni()
+  {
+    $q = "SELECT * FROM t_testimoni_bnc order by tgl DESC";
+    $data = $this->db->selectData($q);
+    $h = "";
+    for($i=0; $i<count($data); $i++):
+      $h .= '<tr><td class="tooltipped z-depth-2" data-tooltip=" Dari : '.$data[$i]["nama"].'" data-position="top">'.$data[$i]["nama"].'</td><td>'.$data[$i]["email"].'</td>';
+      $h .= '<td><a class="waves-effect waves-light btn modal-trigger" href="readkontak?x=t&id='.$data[$i]["id"].'" target="_blank">Baca</a></td>';
+      $h .= '<td>'.$this->ubahTimeStamp($data[$i]["tgl"]).'</td><td>'.(($data[$i]["status"] == "1") ? "Tampil" : "Tdk Tampil").'</td>';
+      $h .= '<td>';
+      $h .= '<a href="produk_aksi?a=e&q='.$data[$i]["id"].'" class="btn-floating waves-effect waves-light light-blue tooltipped z-depth-2" data-position="left" data-tooltip="Edit Dari '.$data[$i]["nama"].'"><i class=" mdi-editor-mode-edit"></i></a>';
+      $h .= '<a href="produk_aksi?a=x&q='.$data[$i]["id"].'"" class="btn-floating waves-effect waves-light light-red tooltipped z-depth-2" data-position="left" data-tooltip="Hapus Dari '.$data[$i]["nama"].'"><i class=" mdi-content-clear"></i></a>';
+      $h .= '</td></tr>';
+      // $h .= '<div id="pesan'.$i.'" class="modal modal-fixed-footer"><div class="modal-content">';
+      // $h .= $data[$i]["pesan"];
+      // $h .= $this->updateKontakStatus($data[$i]["id"]);
+      // $h .= '</div><div class="modal-footer"><a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat ">Tutup</a></div></div>';
+
+    endfor;
+    return $h;
+  }
+
+  // end kontak testimoni
+
 
 }
 
