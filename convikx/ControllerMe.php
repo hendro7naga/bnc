@@ -294,6 +294,7 @@ class ControllerMe {
 
   }
 
+/** hendro
   function getTestimonial() {
     $q = "SELECT * FROM t_testimoni_bnc";
     $data = $this->db->selectData($q);
@@ -310,6 +311,29 @@ class ControllerMe {
               <span class=\"bordered-icon\"><i class=\"fa fa-th-large\"></i></span>
               <p>{$data[$i]['isi']}</p>
               <span class=\"author\">{$data[$i]['nama']}, <a href=\"http://{$data[$i]['website']}\" target=_blank>{$data[$i]['jabatan']}</a></span></div>" . PHP_EOL;
+      $str .= "</div>" . PHP_EOL;
+    }
+    return $str;
+  }
+  **/
+
+  function getTestimonial()
+  {
+    $q = "SELECT * FROM t_testimoni_bnc where status = '1' LIMIT 20";
+    $data = $this->db->selectData($q);
+    $str = "";
+
+    for ($i = 0; $i < count($data); $i += 1) {
+      if ($i == 0)
+        $str .= "<div class=\"item active\">" . PHP_EOL;
+      else
+        $str .= "<div class=item>" . PHP_EOL;
+
+      $str .= "<div class=\"headline-center-v2 headline-center-v2-dark\">
+              <h2>Apa kata orang mengenai kami?</h2>
+              <span class=\"bordered-icon\"><i class=\"fa fa-th-large\"></i></span>
+              <p>{$data[$i]['pesan']}</p>
+              <span class=\"author\"><a href=#>{$data[$i]['nama']}</a></span></div>" . PHP_EOL;
       $str .= "</div>" . PHP_EOL;
     }
     return $str;
@@ -531,6 +555,26 @@ class ControllerMe {
       return $this->db->bnc();
     }
   }
+
+  // begin kontak testimoni
+  function inputKontak($nama, $email, $subjek, $pesan, $status, $er)
+  {
+    $q = "INSERT INTO `t_kontak_bnc` (`id`, `nama`, `email`, `subjek`, `pesan`, `tgl`, `status`, `error`) VALUES (NULL, '$nama', '$email', '$subjek', '$pesan', CURRENT_TIMESTAMP, '$status', '$er')";
+    $h = $this->db->insertData($q);
+    if(!$h)
+      return "0";
+    return "1";
+  }
+
+  function inputTestimoni($nama, $email, $pesan, $status)
+  {
+    $q = "INSERT INTO `t_testimoni_bnc` (`id`, `nama`, `email`, `pesan`, `tgl`, `status`) VALUES (NULL, '$nama', '$email', '$pesan', CURRENT_TIMESTAMP, '2')";
+    $h = $this->db->insertData($q);
+    if(!$h)
+      return "0";
+    return "1";
+  }
+  // end kontak testimoni
 
 }
 
