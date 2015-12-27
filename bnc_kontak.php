@@ -1,4 +1,13 @@
 <?php
+ini_set('session.use_trans_sid', '0');
+
+$char = strtoupper(substr(str_shuffle('abcdefghjkmnpqrstuvwxyz'), 0, 4));
+
+$str = rand(1, 7) . rand(1, 7) . $char;
+
+session_start();
+$_SESSION['captcha_id'] = $str;
+
 require_once("convikx/apps.php");
 ?>
 <!DOCTYPE html>
@@ -19,6 +28,7 @@ require_once("convikx/apps.php");
 
     <!-- CSS Page Style -->    
     <link rel="stylesheet" href="assets/css/pages/page_contact.css">
+    <link href="css/notif.css" rel="stylesheet" type="text/css" />
 </head>	
 
 <body class="header-fixed header-fixed-space">    
@@ -62,7 +72,7 @@ require_once("convikx/apps.php");
             <div class="col-md-9 mb-margin-bottom-30">
                 <div class="headline"><h2>Kontak Kami</h2></div>
                 <p>Silahkan isi form kontak dibawah ini untuk memberi masukan, saran dan hal lainnya.</p>
-                <form action="assets/php/sky-forms-pro/demo-contacts-process.php" method="post" id="sky-form3" class="sky-form sky-changes-3">
+                <form action="sfadfadsfa.bnc" method="post" class="sky-form sky-changes-3" id="bnc">
                     <fieldset>                  
                         <div class="row">
                             <section class="col col-6">
@@ -98,10 +108,10 @@ require_once("convikx/apps.php");
                         </section>
                         
                         <section>
-                            <label class="label">Enter characters below:</label>
+                            <label class="label">Ketik Kode dibawah:</label>
                             <label class="input input-captcha">
                                 <img src="assets/plugins/sky-forms-pro/skyforms/captcha/image.php?<?php echo time(); ?>" width="100" height="32" alt="Captcha image" />
-                                <input type="text" maxlength="6" name="captcha" id="captcha">
+                                <input type="text" maxlength="6" name="kode" id="captcha">
                             </label>
                         </section>
                         
@@ -111,10 +121,8 @@ require_once("convikx/apps.php");
                         <button type="submit" class="btn-u">Kirim Pesan</button>
                     </footer>
                     
-                    <div class="message">
-                        <i class="rounded-x fa fa-check"></i>
-                        <p>Terima kasih. Pesan sudah kami diterima.<br/>Pesan Anda akan kami tanggapi secepatnya!</p>
-                    </div>
+                    <div id="tunggu" style="display:none;"><img src="img/loading01.gif" alt="loading..." width="100px" height="100px" /> Loading...</div>
+                     <div id="hasil"></div>
                 </form>
             </div><!--/col-md-9-->
             
@@ -144,6 +152,34 @@ require_once("convikx/apps.php");
 
 <!-- JS Global Compulsory -->			
 <?php include("include/jsbawah.php"); ?>
+<script type="text/javascript">
+$(document).ready(function() {
 
+    $(document).ajaxStart(function() {
+        $('#tunggu').show();
+        $('#hasil').hide();
+    }).ajaxStop(function() {
+        $('#tunggu').hide();
+        $('#hasil').fadeIn('slow');
+    });
+
+    $("#bnc").submit(function(e){
+        e.preventDefault();
+        dataString = $("#bnc").serialize();
+
+        $.ajax({
+        type: "POST",
+        url:  $("#bnc").attr('action'),
+        data: $("#bnc").serialize(),
+        //dataType: "json",
+        success: function(data) {
+          $('#hasil').html(data);
+
+        }
+
+        });
+    });
+});
+</script>
 </body>
 </html>	
