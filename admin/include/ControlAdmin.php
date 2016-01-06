@@ -160,7 +160,7 @@ class ControlAdmin {
     $str .= '<li class="bold"><a class="collapsible-header  waves-effect waves-cyan"><i class="mdi-editor-insert-comment"></i> Produk</a>';
     $str .= '<div class="collapsible-body"><ul><li><a href="t_produk">Tambah</a></li><li><a href="l_produk">Edit/Hapus</a></li></ul></div></li>';
     $str .= '<li class="bold"><a class="collapsible-header  waves-effect waves-cyan"><i class="mdi-editor-insert-comment"></i> SubMenu</a>';
-    $str .= '<div class="collapsible-body"><ul><li><a href="#">Tambah</a></li><li><a href="#">Edit/Hapus</a></li></ul></div></li>';
+    $str .= '<div class="collapsible-body"><ul><li><a href="submenu?actions=tambahsubmenu">Tambah</a></li><li><a href="esubmenu">Edit/Hapus</a></li></ul></div></li>';
     $str .= '<li class="bold"><a class="collapsible-header  waves-effect waves-cyan"><i class="mdi-editor-insert-comment"></i> Konten</a>';
     $str .= '<div class="collapsible-body"><ul><li><a href="konten?actions=tambahkonten">Tambah</a></li><li><a href="tampilkonten">Edit/Hapus</a></li></ul></div></li>';
     $str .= '<li class="bold"><a href="l_kontak" class="waves-effect waves-cyan"><i class="mdi-communication-email"></i> Kontak Kami '.(($this->countUnreadKontak() > 0) ? ' <span class="new badge">'.$this->countUnreadKontak().'</span></a>':'').'</li>';
@@ -446,6 +446,60 @@ class ControlAdmin {
 
 
   // end produk
+
+  /* -- start submenu -- */
+  function loadMenus($parents = "") {
+    $q = "SELECT * FROM t_menuhead_bnc";
+    $data = $this->db->selectData($q);
+    $readonlys = ($parents == "") ? "" : "disabled";
+    $str = "<div class=section></div><select name=menupilihan id=menupilihan {$readonlys}>" . PHP_EOL;
+    $str .= "<option value= selected> -- Pilih Menu -- </option>";
+    for ($i = 0; $i < count($data); $i += 1) :
+      if ($data[$i]['menuID'] == 101 || $data[$i]['menuID'] == "101") :
+        continue;
+      endif;
+      if ($parents == $data[$i]['menuID']) :
+        $str .= "<option value=menu_{data[$i]['menuID']} selected=true>" . $data[$i]['menuNama'] . "</option>";
+      else :
+        $str .= "<option value=menu_{$data[$i]['menuID']}>" . $data[$i]['menuNama'] . "</option>";
+      endif;
+    endfor;
+    $str .= "</select>" . PHP_EOL;
+    return $str;
+  }
+  function loadSubMenuItems() {
+    $q = "SELECT * FROM t_menuhead_bnc";
+    $dataMenu = $this->db->selectData($q);
+    $str = "<ul class=\"collection with-header\">";
+    for ($i = 0; $i < count($dataMenu); $i += 1) :
+      $parentsId = $dataMenu[$i]['menuID'];
+      if ($parentsId == 101 || $parentsId == "101") :
+        continue;
+      endif;
+      $str .= "<li class=\"collection-header\"><h5>{$dataMenu[$i]['menuNama']}</h5>" . PHP_EOL;
+      $str .= "<ul class=\"collection datasub\">";
+
+      $qSub = "SELECT subID, subNama FROM t_submenuhead_bnc WHERE subParentID='$parentsId'";
+      $dataSub = $this->db->selectData($qSub);
+      for ($j=0; $j < count($dataSub); $j+=1) { 
+        $str .= "<li class=\"collection-item\">
+                  <div class=row>
+                    <div class=\"col s10\">{$dataSub[$j]['subNama']}</div>
+                    <div class=\"col s2\">
+                      <a href=\"submenu?actions=editsubmenu&dataId={$dataSub[$j]['subID']}&p={$parentsId}\" class=\"btn-floating waves-effect waves-light light-blue darken-4\">
+                        <i class=\"material-icons small mdi-editor-mode-edit\"></i></a>&nbsp; 
+                      <a class=\"btn-floating waves-effect waves-light red btnDelete\" id=data_{$dataSub[$j]['subID']}>
+                        <i class=\"material-icons small mdi-content-clear\"></i></a>
+                    </div>
+                  </div>
+                </li>";
+      }
+      $str .= "</ul>";
+    endfor;
+    $str .= "</ul>";
+    return $str;
+  }
+  /* -- end submenu -- */
 
   function showKonten() {
     $q = "SELECT bid, judul, isi, tampildepan FROM t_berita_bnc";

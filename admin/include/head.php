@@ -17,6 +17,8 @@
 <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection">
 <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection">
 
+<!-- COSTUM CSS -->
+<link rel="stylesheet" type="text/css" href="css/custom.css" media="screen">
 
 <!-- INCLUDED PLUGIN CSS ON THIS PAGE -->
 <link href="css/prism.css" type="text/css" rel="stylesheet" media="screen,projection">

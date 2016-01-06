@@ -17,16 +17,22 @@ if (isset($_GET['actions'])) {
   $heads = null;
   $fomname = null;
   $judul = "";
+  $imgDefault = "";
   $isiData = "";
   $kontenId = "";
   if ($reqs == 'tambahkonten') :
     $heads = "Tambah Konten";
+    $imgDefault = "gambar_default.jpg";
   elseif ($reqs == 'editkonten') :
     $heads = "Edit Konten";
     $kontenId = $_GET['dataid'];
-    $q = "SELECT judul, isi FROM t_berita_bnc WHERE bid='$kontenId'";
+    $q = "SELECT judul, isi, gambarUtama FROM t_berita_bnc WHERE bid='$kontenId'";
     $data = $kontrol->db->selectDataSingle($q);
     $judul = $data['judul'];
+    $imgDefault = $data['gambarUtama'];
+    if ($imgDefault == "" || $imgDefault == null) :
+      $imgDefault = "gambar_default.jpg";
+    endif;
     $isiData = $data['isi'];
   endif;
 }
@@ -38,6 +44,7 @@ if (isset($_GET['actions'])) {
   <title>BNC - <?php echo $heads; ?></title>
   <script src="ckeditor/ckeditor.js"></script>
   <script src="js/expression.js"></script>
+  <link rel="stylesheet" type="text/css" href="css/custom.css">
 </head>
 
 <body>
@@ -113,6 +120,7 @@ if (isset($_GET['actions'])) {
                 </ol>
               </div>
             </div>
+            <span id="loadInfo">Sedang proses...</span>
           </div>
         </div>
         <!--breadcrumbs end-->
@@ -149,6 +157,20 @@ if (isset($_GET['actions'])) {
                             </div>
                             <div class="divider"></div>
                             <div class="row">
+                              <div class="section">
+                                <div class="input-field col s6">
+                                  <h6 style="padding-bottom: 4px; border-bottom: 1px dotted #444;">Gambar Utama:</h6>
+                                  <input type="file" name="gambarin" id="gambarin"> 
+                                </div>
+                              </div><br/><br class="divider" />
+                              <div class="section col s5">
+                                <div class="row">
+                                  <img class="responsive-img" id="gambarout" src="../img/<?php echo $imgDefault; ?>"/>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="divider"></div>
+                            <div class="row">
                                 <div class="section">
                                     <div class="input-field col s12">
                                       <textarea id="editor1" name="editor1" class="materialize-textarea"><?php echo $isiData; ?></textarea>
@@ -172,34 +194,6 @@ if (isset($_GET['actions'])) {
                   </div>
                 </div>
               </div>
-              <script type="text/javascript">
-                  var fom         = document.getElementById('fomKonten'),
-                      btn         = document.getElementById('btnSimpan'),
-                      judul       = document.getElementById('judulKonten'),
-                      dataKonten  = CKEDITOR.instances.editor1,
-                      simpan      = function (evt) {
-                          evt.stopPropagation();
-                          if (!expression.validation.inputText(judul.value, 2)) {
-                              expression.modals("Harap isikan judul dengan benar!");
-                              judul.focus();
-                              return;
-                          }
-                          /*if (!expression.validation.inputText(
-                              expression.cleanTag(dataKonten.getData()).trim()
-                          )) {
-                              expression.modals("Konten yang akan disimpan tidak boleh kosong!!!");
-                              return;
-                          }*/
-                          dataKonten.updateElement();
-                          if (expression.cleanTag(dataKonten.getData()).trim().length < 12) {
-                            expression.modals("Konten yang akan disimpan tidak boleh kosong!!!");
-                            return;
-                          }
-
-                          fom.submit();
-                      };
-                  btn.addEventListener('click', simpan);
-              </script>
         </div>
         <!--end container-->
 
@@ -250,7 +244,89 @@ if (isset($_GET['actions'])) {
     <script type="text/javascript" src="js/plugins.js"></script>
 	<script type="text/javascript" src="js/formaksi.js"></script>
 
+<script type="text/javascript">
+    var fom         = document.getElementById('fomKonten'),
+        elGbrIn     = document.getElementById('gambarin'),
+        elGbrOut    = document.getElementById('gambarout'),
+        btn         = document.getElementById('btnSimpan'),
+        judul       = document.getElementById('judulKonten'),
+        dataKonten  = CKEDITOR.instances.editor1,
+        ajaxImg     = function () {
+          //evt.stopPropagation();
+          var xhr     = new XMLHttpRequest(),
+              methods = "",
+              strUrl  = "file_uploader.php",
+              fomData = new FormData();
+          if (!window.XMLHttpRequest) {
+            expression.modals("Browser Anda tidak mendukung teknologi AJAX. Silahkan upgrade Browser ke versi terbaru agar aplikasi dapat berjalan dengan baik.");
+            return;
+          }
+          else {
+            fomData.append("imgupload", elGbrIn.files[0]);
+            fomData.append("details", "berita");
 
+            xhr.onreadystatechange = function () {
+              if (xhr.readyState == 4) {
+                  $("#loadInfo").css("display", "none");
+                  if (xhr.status == 200) {
+                    var respon = xhr.responseText;
+                    if (respon) {
+                      elGbrOut.setAttribute("src", "../img/"+elGbrIn.value);
+                      expression.modals("Proses Berhasil!!!");
+                    } else {
+                      expression.modals("Terjadi kesalahan pada server. Harap hubungi pihak developer. Terima kasih!!!");
+                    }
+                  } else {
+                    expression.modals("Terjadi kesalahan. Harap hubungi pihak developer. Terima kasih!!!");
+                  }
+                } 
+              else {
+                $("#loadInfo").css("display", "block");
+              }
+            };
+            
+            xhr.open("POST", strUrl);
+            xhr.send(fomData);
+          } //end of init functionality ajax
+          //alert(evt.target.value);
+        },
+        funcSendImg = function (evt) {
+          evt.stopPropagation();
+          if (expression.validation.imgExt(evt.target.value)) {
+            //fomData.append("imgupload", elImg.files[0]);
+            //fomData.append("details", "ucapan");
+            //xhrRespon(fomData, strUrl);
+            ajaxImg();
+          }
+          else {
+            expression.modals("Format gambar tidak sesuai. Gambar harus berekstensi .jpg");
+          }
+        },
+        simpan      = function (evt) {
+            evt.stopPropagation();
+            if (!expression.validation.inputText(judul.value, 2)) {
+                expression.modals("Harap isikan judul dengan benar!");
+                judul.focus();
+                return;
+            }
+            /*if (!expression.validation.inputText(
+                expression.cleanTag(dataKonten.getData()).trim()
+            )) {
+                expression.modals("Konten yang akan disimpan tidak boleh kosong!!!");
+                return;
+            }*/
+            dataKonten.updateElement();
+            if (expression.cleanTag(dataKonten.getData()).trim().length < 12) {
+              expression.modals("Konten yang akan disimpan tidak boleh kosong!!!");
+              return;
+            }
+
+            fom.submit();
+        };
+    btn.addEventListener('click', simpan);
+    elGbrIn.addEventListener('change', funcSendImg);
+    //alert(document.getElementById("gambarin").value);
+</script>
 
 </body>
 

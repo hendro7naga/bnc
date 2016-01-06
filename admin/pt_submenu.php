@@ -23,21 +23,14 @@ require_once("../convikx/appsadmin.php");
 <?php
 if (isset($_POST['dataPost'])) {
   $dataPost = $_POST['dataPost'];
-  $juduls = $_POST['judulKonten'];
+  $juduls = $_POST['judulSubMenu'];
   $konten = $_POST['editor1'];
-  $gambar = (strlen($_POST['gambarin']) < 2) ? "gambar_default.jpg" : $_POST['gambarin'];
   
   $author = "Admin";
-  if ($dataPost === "tambahkonten"):
-    $tampilkandepan = 0;
-    //echo "<div>{$judul}</div><div>$konten</div>";
-    $qb = "SELECT * FROM t_berita_bnc WHERE tampildepan=1";
-    $baris = $kontrol->db->jumlahBaris($qb);
-    if ($baris < 3):
-      $tampilkandepan = 1;
-    endif;
-
-    $qi = "INSERT INTO t_berita_bnc (judul, isi, gambarUtama, penulis, tampildepan) VALUES ('$juduls', '$konten', '$gambar', '$author', '$tampilkandepan')";
+  if ($dataPost === "tambahsubmenu"):
+  	$arrData= explode('_', $_POST['menupilihan']);
+  	//print_r($arrData);
+    $qi = "INSERT INTO t_submenuhead_bnc (subParentID, subNama, subKonten) VALUES ('$arrData[1]', '$juduls', '$konten')";
     $res = $kontrol->db->insertData($qi);
     if ($res == null):
       ?>
@@ -52,7 +45,7 @@ if (isset($_POST['dataPost'])) {
         </div>
       </div>
       <?php
-      header('Refresh: 2, URL=index.html');
+      header('Refresh: 2, URL=esubmenu');
     else:
       ?>
       <div class="section">
@@ -65,17 +58,19 @@ if (isset($_POST['dataPost'])) {
         </div>
       </div>
       <?php
-       header('Refresh: 2, URL=tampilkonten');
+       header('Refresh: 2, URL=esubmenu');
     endif;
 
-  elseif ($dataPost == "editkonten"):
+  elseif ($dataPost == "editsubmenu"):
     $kontenid = $_POST['kontenId'];
-    if ($gambar == "gambar_default.jpg") {
+	$q = "UPDATE t_submenuhead_bnc set subNama = '$juduls', subKonten = '$konten' WHERE subID='$kontenid'";
+	//echo "<p>Judul : ". $juduls . " - ID : " . $kontenid . " - Isi : " . $konten ."</p>";
+    /*if ($gambar == "gambar_default.jpg") {
       $q = "UPDATE t_berita_bnc SET judul='$juduls', isi='$konten' WHERE bid='$kontenid'";
     }
     else {
       $q = "UPDATE t_berita_bnc SET judul='$juduls', isi='$konten', gambarUtama='$gambar' WHERE bid='$kontenid'";
-    }
+    }*/
     $res = $kontrol->db->insertData($q);
     if ($res == null) {
       ?>
@@ -103,7 +98,7 @@ if (isset($_POST['dataPost'])) {
           </div>
         </div>
         <?php
-         header('Refresh: 2.6, URL=tampilkonten');
+         header('Refresh: 2.6, URL=esubmenu');
     } //end elseif editkonten
   endif;
 }

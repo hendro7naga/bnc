@@ -259,14 +259,14 @@ class ControllerMe {
   }
 
   function getBeritaTerbaru() {
-    $q = "SELECT * FROM t_berita_bnc WHERE tampildepan=1 LIMIT 3";
+    $q = "SELECT * FROM t_berita_bnc ORDER BY tanggal LIMIT 3";
     $data = $this->db->selectData($q);
     $str = "";
     for ($i = 0; $i < count($data); $i += 1) {
       $str .= "<div class=\"col-sm-4 col-sm-offset-0\">
           <div class=\"thumbnails-v1\">
               <div class=\"thumbnail-img\">
-                  <img class=\"img-responsive\" src=\"img/{$data[$i]['gambarUtama']}\" alt=bnCoffeeImages>
+                  <img class=\"img-responsive img-fixed\" src=\"img/{$data[$i]['gambarUtama']}\" alt=bnCoffeeImages>
               </div>
               <div class=caption>
                   <h3><a href=javascript:void(0)>{$data[$i]['judul']}</a></h3>

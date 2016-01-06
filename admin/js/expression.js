@@ -70,7 +70,7 @@
     },
     validation: {
       inputText: function (data, minDataLength) {
-        var patterns = /^[A-Za-z]{0,}([\w\W]*)?[A-Za-z]$/g,
+        var patterns = /^[A-Za-z]{0,}([\w\W]*)?[A-Za-z0-9]$/g,
           tmpData  = data.replace(/ /g, 'a');
         if (minDataLength !== undefined || minDataLength > 0) {
           return (patterns.test(data)) ? ((data.length >= minDataLength) ? true : false) : false;

@@ -9,3 +9,29 @@
       padding: 2px 6px;
       box-shadow: 0 0 4px 1px #999;
 }
+#gambarout {
+	position: relative;
+	display: block;
+	margin-top: 6px;
+	margin-bottom: 5px;
+}
+.datasub {
+      display: none;
+      cursor: default;;
+}
+
+.collection-header {
+      cursor: pointer;
+}
+
+.collection-header:hover {
+      background-color: #e0e0e0 !important;
+}
+
+.collection-header h5 {
+      font-size: 1.22rem !important;
+}
+
+.active-selected {
+      background-color: #bdbdbd !important;
+}
